@@ -1,0 +1,43 @@
+lista de compras  = [ "leche", "pan", "huevos", "frutas", "verduras"]
+elementos comprados = ["cafe", "arroz"]
+
+def agregar_elemento():
+    elemento = input("Ingrese el nombre del elemento a agregar: ")
+    lista_de_compras.append(elemento)
+    print(f"{elemento} ha sido agregado a la lista de compras.")
+
+def marcar_comprado():
+    elemento = input("Ingrese el nombre del elemento que ha sido comprado: ")
+    if elemento in lista_de_compras:
+        lista_de_compras.remove(elemento)
+        elementos_comprados.append(elemento)
+        print(f"{elemento} ha sido marcado como comprado.")
+    else:
+        print(f"{elemento} no está en la lista de compras.")
+
+def mostrar_lista():
+    print("\n--- Estado Actual del carrito ---:")
+    print(f"por comprar: {lista_de_compras}")
+    print(f"comprados: {elementos_comprados}")
+
+    --- Bloque de Ejecucion ---
+while True:
+    print("\nOpciones:")
+    print("1. Agregar elemento a la lista de compras")
+    print("2. Marcar elemento como comprado")
+    print("3. Mostrar estado del carrito")
+    print("4. Salir")
+
+    opcion = input("Seleccione una opción (1-4): ")
+
+    if opcion == "1":
+        agregar_elemento()
+    elif opcion == "2":
+        marcar_comprado()
+    elif opcion == "3":
+        mostrar_lista()
+    elif opcion == "4":
+        print("Saliendo del programa...")
+        break
+    else:
+        print("Opción no válida. Por favor, seleccione una opción del 1 al 4.")
