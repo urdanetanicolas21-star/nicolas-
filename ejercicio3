@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>mi segundo ejercicio</title>
+    <link rel="stylesheet" href="1.css">
+</head>
+<body>
+    <h1>mi animal favorito</h1>
+    <img style width = "250px"="https://static.wikia.nocookie.net/reinoanimalia/images/2/24/Leon_by_Gunther_Fraulob.jpg/revision/latest?cb=20240925142954&path-prefix=es" alt="leon"
