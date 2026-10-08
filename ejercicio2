@@ -1,0 +1,17 @@
+h1> mis sitios wed favoritos </h1>
+    <nav>
+       <ul> 
+           <li> <a href="https://www.instagram.com/nicolasramirez846?stkn=dTE1b3RmNm01NDJz" > instagram </a></li>
+           <li> <a href="https://www.tiktok.com/@nicolas.r404?_r=1&_t=ZS-9ANzDujT4xJ"> tik tok </a></li>
+           <li> <a href= "https://www.facebook.com/share/1Dv7bEF6SH/"> facebook </a></li>
+       </ul><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>mi segundo ejercicio</title>
+    <link rel="stylesheet" href="1.css">
+</head>
+<body>
+
+    </nav>
