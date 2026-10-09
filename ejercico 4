@@ -1,0 +1,32 @@
+html 
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ejercicio 4</title>
+    <link rel="stylesheet" href="ejercicio4.css">
+</head>
+<body>
+
+    <h1> yo el programador</h1>
+    <p> primer parrafo de ejemplo</p>
+    <p> segundo parrafo de ejemplo</p>
+
+</body>
+</html>
+
+css
+
+body {
+    background-color: #f0f0f0;
+}
+
+h1 {
+    color: navy;
+}
+
+p {
+    font-size: 18px;
+}
