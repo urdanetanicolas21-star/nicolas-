@@ -1,0 +1,53 @@
+html
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ejercicio 7</title>
+    <link rel="stylesheet" href="ejercicio7.css">
+
+</head>
+<body>
+
+    <div class="tarjeta"
+        <img src="https://via.placeholder.com/150" alt="Imagen de ejemplo">
+        <h2> nicolas ramirez</h2>
+        <p> programador web </p>
+    </div>
+
+    </body>
+    </html>
+
+    css
+
+    .tarjeta img {
+    width: 300px;
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    padding: 20px;
+    margin: 40px auto;
+}
+
+.tarjeta img {
+    width: 150px;  
+    height: 150px;
+    border-radius: 50%;
+    margin-bottom: 15px;
+
+}
+
+.tarjeta h2 {
+    margin: 10px 0 5px 0;
+    color:#333333;
+
+}
+
+.tarjeta p {
+    margin: 0;
+    color: #666666;
+}
