@@ -1,0 +1,30 @@
+html
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ejercicio 6</title>
+    <link rel="stylesheet" href="ejercicio6.css">
+</head>
+<body>
+
+    <div class="caja"
+        <h2> Título de la caja </h2>
+        <p> holaa soy nicolas </p>
+    </div>
+
+    </body>
+    </html>
+
+    css
+
+    caja {
+    width: 400px;
+    background-color: #eaf2f8;
+    border: 2px solid #3498db;
+    padding: 20px;
+    matgin: 30px;
+    
+}
