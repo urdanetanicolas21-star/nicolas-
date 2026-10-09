@@ -1,0 +1,29 @@
+html
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ejercicio 5</title>
+    <link rel="stylesheet" href="ejercicio5.css">
+</head>
+<body>
+    <h1>crear los estilos</h1>
+    <p class="destacado"> profesor de programación</p>
+    <p> segundo parrafo</p>
+    <p id="resumen"> tercer parrafo</p>
+</body>
+</html>
+
+css
+
+destacado  {
+    background-color: yellow;
+    font-weight: bold;
+}
+
+resumen {
+    font-style: italic;
+    color: #2c3e50;
+}
