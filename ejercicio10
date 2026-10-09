@@ -1,0 +1,110 @@
+html
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ejercicio 10</title>
+    <link rel="stylesheet" href="ejercicio10.css">
+</head>
+<body>
+
+    <header>
+        <h1>nicolas ramirez</h1>
+    </header>
+
+<main>
+    <section>
+        <h2>Sobre mi</h2>
+        <p>Hola, soy nicolas ramirez y me gusta programar</p>
+        </section>
+        
+    <section>
+        <h2>Mis intereses</h2>
+        <ul>
+            <li>Programación</li>
+            <li>gimnasio</li>
+            <li>jugar fútbol</li>
+        </ul>
+    </section>
+</main>
+
+<footer>
+    <p> mis redes sociales</p>
+    <div>class="redes-sociales">
+        <a href= "https://www.tiktok.com/@nicolas.r404?_r=1&_t=ZS-9APoNsIBoZA" target="_blank">TikTok</a>
+        <a href="https://www.instagram.com/nicolasramirez846?srtk=dTE1b3RmNm01NDJz" target="_blank">Instagram</a>
+    </div>
+</footer>
+
+</body>
+</html>
+
+css
+
+body {
+    font-family: arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f6f8;
+    color: #333;
+}
+
+header {
+    background-color: #2c3e50;
+    color: white;
+    padding: 30px 20px;
+    text-align: center;
+}
+
+main {
+    padding: 0 20px;
+    max-width: 700px;
+    margin: 20px auto;
+}
+
+.tarjeta-seccion {
+    background-color: white;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.foto-perfil {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    display: block;
+    margin: 15xp auto;
+    border: 3px solid #3498db;
+}
+
+h2 {
+    color: #2c3e50;
+    border-bottom: 2px solid #ecf0f1;
+    padding-bottom: 8px;
+}
+
+.lista-hobbies {
+    line-height: 1.8;
+}
+
+footer {
+    background-color: #1e2b37;
+    color: white;
+    text-align: center;
+    padding: 15px 20px;
+    margin-top: 40px;
+}
+
+footer a {
+    color: #3498db;
+    text-decoration: none;
+    margin: 0 5px;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
