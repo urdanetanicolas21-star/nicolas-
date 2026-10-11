@@ -1,0 +1,16 @@
+html
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ejercicio 15 - reproduccion de video</title>
+</head>
+<body>
+    <h1>reproduccion de video</h1>
+    <video controls width="640" height="360">
+        <source src="video.mp4" type="video/mp4">
+        <track src="subtitles.vtt" kind="subtitles" srclang="es" label="Español">
+    </video>
+</body>
+</html>
