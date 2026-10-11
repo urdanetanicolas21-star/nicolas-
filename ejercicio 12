@@ -1,0 +1,18 @@
+html
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ejercicio 12 - formator de codigo</title>
+</head>
+<body>
+    <h1>codigo</h1>
+    <pre><code>
+def saludar(nombre):
+    print(f"Hola, {nombre}!")
+
+saludar("Nicolas")
+    </code></pre>
+</body>
+</html>
