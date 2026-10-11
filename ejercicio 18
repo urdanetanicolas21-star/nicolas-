@@ -1,0 +1,46 @@
+html
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ejercicio 18 - formulario avanzado</title>
+</head>
+<body>
+    <form action="/procesar" method="POST">
+        <fieldset>
+            <legend>Género (seleccion unica)</legend>
+            <label>
+                <input type="radio" name="genero" value="masculino"> Masculino
+            </label>
+            <label>
+                <input type="radio" name="genero" value="femenino"> Femenino
+            </label>
+        </fieldset>
+
+        <fieldset>
+            <legend>Intereses (seleccion multiple)</legend>
+            <label>
+                <input type="checkbox" name="intereses" value="deportes"> Deportes
+            </label>
+            <label>
+                <input type="checkbox" name="intereses" value="musica"> Música
+            </label>
+            <label>
+                <input type="checkbox" name="intereses" value="programacion"> Programación
+            </label>
+        </fieldset>
+
+        <br>
+        <label for="pais">País:</label>
+        <select name="pais" id="pais">
+            <option value="ve" selected>Venezuela</option>
+            <option value="br">Brasil</option>
+            <option value="co">colombia</option>
+        </select>
+
+        <br><br>
+        <button type="submit">Enviar</button>
+    </form>
+</body>
+</html>
