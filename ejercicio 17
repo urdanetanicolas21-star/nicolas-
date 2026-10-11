@@ -1,0 +1,36 @@
+html
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ejercicio 17 - tipografia y enlaces</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <p>este es mi parrafo con tipografia normal (san-serif)</p>
+    <p class="destacado">este es mi parrafo destacado con negrita, cursiva y color rojo</p>
+    
+</body>
+</html>
+
+css
+
+body {
+    font-family: sans-serif;
+}
+
+.destacado {
+    font-style: italic;
+    color: red;
+    font-weight: bold;
+}
+
+a {
+    text-decoration: none;
+    color: blue;
+}
+
+a:hover {
+    text-decoration: underline;
+}
