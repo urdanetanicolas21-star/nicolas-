@@ -1,0 +1,52 @@
+html
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ejercicio 14 - agrupacion de columnas</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <table>
+        <colgroup>
+            <col> class="producto">
+            <col> class="stock">
+        </colgroup>
+        <thead>
+            <tr>
+                <th>Producto</th>
+                <th>Stock</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>teclado mecanico</td>
+                <td>15</td>
+            </tr>
+            <tr>
+                <td>mouse inalambrico</td>
+                <td>30</td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>
+
+css
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+th, td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: left;
+}
+.col.producto {
+    background-color: #f2f2f2;
+}
+.col.stock {
+    background-color: #e6f7ff;
+}
