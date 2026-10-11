@@ -1,0 +1,22 @@
+html
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ejercicio 20 - lienzo</title>
+</head>
+<body>
+    <h1> graficos dinamicos con canvas </h1>
+    <canvas id="milienzo" width="400" height="200" style="border:1px solid #000;"></canvas>
+
+    <script>
+        const canvas = document.getElementById('milienzo')
+        const ctx = canvas.getContext('2d');
+
+        // Dibujar un rectángulo
+        ctx.fillStyle = '#3498db';
+        ctx.fillRect(50, 50, 150, 100);
+    </script>
+</body>
+</html>
