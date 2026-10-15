@@ -1,0 +1,2405 @@
+/* ==========================================================================
+   REINO ANIMAL - ESTILOS PRINCIPALES
+   Estética de Selva Esmeralda, Fondo Verde Vibrante, Glassmorphism y Biodiversidad
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+  /* Paleta Verde Selva y Esmeralda */
+  --bg-deep-forest: #04140b;
+  --bg-jungle-dark: #072213;
+  --bg-jungle-card: rgba(8, 38, 22, 0.75);
+  --bg-jungle-card-hover: rgba(14, 54, 32, 0.9);
+  
+  --emerald-vibrant: #10b981;
+  --neon-lime: #00ff87;
+  --leaf-light: #4ade80;
+  --moss-accent: #a3e635;
+  --jungle-gold: #facc15;
+  --tropical-coral: #fb7185;
+  --cyan-aquatic: #38bdf8;
+
+  --text-main: #f0fdf4;
+  --text-muted: #86efac;
+  --text-dim: #4ade80b3;
+  
+  --border-emerald: rgba(16, 185, 129, 0.25);
+  --border-glow: rgba(0, 255, 135, 0.5);
+  --glow-lime: 0 0 25px rgba(0, 255, 135, 0.4);
+  --card-shadow: 0 16px 36px -10px rgba(0, 0, 0, 0.7);
+
+  --font-heading: 'Outfit', sans-serif;
+  --font-body: 'Plus Jakarta Sans', sans-serif;
+  --transition-smooth: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Reset y base */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--bg-deep-forest);
+  color: var(--text-main);
+  line-height: 1.6;
+  overflow-x: hidden;
+  min-height: 100vh;
+  position: relative;
+}
+
+/* Fondo verde envolvente con gradientes orgánicos de jungla */
+.jungle-ambient-bg {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background: 
+    radial-gradient(circle at 10% 20%, rgba(0, 255, 135, 0.12) 0%, transparent 45%),
+    radial-gradient(circle at 90% 70%, rgba(16, 185, 129, 0.15) 0%, transparent 55%),
+    radial-gradient(circle at 50% 90%, rgba(163, 230, 53, 0.08) 0%, transparent 50%),
+    linear-gradient(180deg, #020d07 0%, #062013 50%, #03140c 100%);
+}
+
+/* ==========================================================================
+   BARRA SUPERIOR (SELVA ALIVE TICKER)
+   ========================================================================== */
+.top-notice-bar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(4, 20, 11, 0.88);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border-emerald);
+  padding: 0.6rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.85rem;
+}
+
+.notice-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: var(--neon-lime);
+  font-weight: 700;
+}
+
+.leaf-pulse {
+  display: inline-block;
+  animation: leafFloat 2.5s infinite ease-in-out;
+}
+
+@keyframes leafFloat {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-3px) rotate(8deg); }
+}
+
+.top-bar-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.btn-nature-sound {
+  background: rgba(0, 255, 135, 0.12);
+  border: 1px solid rgba(0, 255, 135, 0.3);
+  color: var(--neon-lime);
+  padding: 0.35rem 0.9rem;
+  border-radius: 20px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  transition: var(--transition-smooth);
+}
+
+.btn-nature-sound:hover {
+  background: rgba(0, 255, 135, 0.25);
+  box-shadow: 0 0 15px rgba(0, 255, 135, 0.35);
+}
+
+.btn-nature-sound.playing {
+  background: rgba(163, 230, 53, 0.25);
+  border-color: var(--moss-accent);
+  color: #bef264;
+}
+
+/* ==========================================================================
+   HEADER Y NAVEGACIÓN
+   ========================================================================== */
+.main-header {
+  position: relative;
+  z-index: 10;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.brand-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  text-decoration: none;
+  color: var(--text-main);
+}
+
+.brand-icon-box {
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(0, 255, 135, 0.25), rgba(16, 185, 129, 0.5));
+  border: 1px solid var(--border-glow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  box-shadow: 0 0 16px rgba(0, 255, 135, 0.3);
+}
+
+.brand-text h1 {
+  font-family: var(--font-heading);
+  font-size: 1.4rem;
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.5px;
+}
+
+.brand-text span {
+  font-size: 0.75rem;
+  color: var(--neon-lime);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+}
+
+.main-nav ul {
+  display: flex;
+  list-style: none;
+  gap: 1.5rem;
+}
+
+.main-nav a {
+  text-decoration: none;
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 0.92rem;
+  transition: var(--transition-smooth);
+  position: relative;
+}
+
+.main-nav a:hover,
+.main-nav a:focus {
+  color: var(--neon-lime);
+}
+
+.main-nav a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0%;
+  height: 2px;
+  background: var(--neon-lime);
+  box-shadow: 0 0 8px var(--neon-lime);
+  transition: var(--transition-smooth);
+}
+
+.main-nav a:hover::after {
+  width: 100%;
+}
+
+/* ==========================================================================
+   HERO SECTION
+   ========================================================================== */
+.hero {
+  position: relative;
+  z-index: 10;
+  max-width: 1280px;
+  margin: 1.5rem auto 4.5rem;
+  padding: 0 1.5rem;
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 3rem;
+  align-items: center;
+}
+
+.hero-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.9rem;
+  border-radius: 30px;
+  background: rgba(0, 255, 135, 0.12);
+  border: 1px solid var(--border-glow);
+  color: var(--neon-lime);
+  font-size: 0.82rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin-bottom: 1.25rem;
+}
+
+.hero-title {
+  font-family: var(--font-heading);
+  font-size: 3.5rem;
+  line-height: 1.08;
+  font-weight: 900;
+  letter-spacing: -1.5px;
+  margin-bottom: 1.25rem;
+}
+
+.hero-title .highlight-lime {
+  color: var(--neon-lime);
+  text-shadow: var(--glow-lime);
+  display: inline-block;
+}
+
+.hero-title .highlight-gold {
+  color: var(--jungle-gold);
+}
+
+.hero-desc {
+  font-size: 1.15rem;
+  color: var(--text-muted);
+  margin-bottom: 2rem;
+  max-width: 580px;
+  line-height: 1.65;
+}
+
+.hero-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.stat-card {
+  background: var(--bg-jungle-card);
+  border: 1px solid var(--border-emerald);
+  border-radius: 16px;
+  padding: 1.15rem 1rem;
+  backdrop-filter: blur(12px);
+  transition: var(--transition-smooth);
+}
+
+.stat-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--neon-lime);
+  box-shadow: 0 8px 25px rgba(0, 255, 135, 0.18);
+}
+
+.stat-num {
+  font-family: var(--font-heading);
+  font-size: 1.9rem;
+  font-weight: 800;
+  color: var(--neon-lime);
+  line-height: 1.1;
+  margin-bottom: 0.25rem;
+}
+
+.stat-label {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  padding: 0.85rem 1.6rem;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  text-decoration: none;
+  transition: var(--transition-smooth);
+  border: none;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--neon-lime), #059669);
+  color: #03140c;
+  box-shadow: 0 4px 20px rgba(0, 255, 135, 0.35);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 28px rgba(0, 255, 135, 0.55);
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-main);
+  border: 1px solid var(--border-emerald);
+  backdrop-filter: blur(8px);
+}
+
+.btn-secondary:hover {
+  background: rgba(0, 255, 135, 0.12);
+  border-color: var(--neon-lime);
+  color: var(--neon-lime);
+}
+
+.hero-image-card {
+  position: relative;
+  border-radius: 24px;
+  overflow: hidden;
+  border: 1px solid var(--border-glow);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.65);
+}
+
+.hero-image-card img {
+  width: 100%;
+  height: 440px;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.6s ease;
+}
+
+.hero-image-card:hover img {
+  transform: scale(1.03);
+}
+
+.hero-image-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(4, 20, 11, 0.92) 0%, rgba(4, 20, 11, 0.2) 50%, transparent 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 1.75rem;
+}
+
+.overlay-badge {
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: var(--neon-lime);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 0.25rem;
+}
+
+.overlay-caption {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+/* ==========================================================================
+   SECCIONES GENERALES
+   ========================================================================== */
+.section {
+  position: relative;
+  z-index: 10;
+  max-width: 1280px;
+  margin: 0 auto 5rem;
+  padding: 0 1.5rem;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 3rem;
+  max-width: 760px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.section-tag {
+  font-size: 0.85rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--neon-lime);
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.section-title {
+  font-family: var(--font-heading);
+  font-size: 2.4rem;
+  font-weight: 800;
+  letter-spacing: -1px;
+  margin-bottom: 0.75rem;
+}
+
+.section-desc {
+  font-size: 1.05rem;
+  color: var(--text-muted);
+}
+
+/* ==========================================================================
+   EL GRAN ÁRBOL TAXONÓMICO: VERTEBRADOS VS INVERTEBRADOS
+   ========================================================================== */
+.taxo-comparison-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.taxo-box {
+  background: var(--bg-jungle-card);
+  border: 1px solid var(--border-emerald);
+  border-radius: 20px;
+  padding: 2rem;
+  backdrop-filter: blur(16px);
+  position: relative;
+  overflow: hidden;
+  transition: var(--transition-smooth);
+}
+
+.taxo-box:hover {
+  border-color: var(--neon-lime);
+  box-shadow: 0 10px 30px rgba(0, 255, 135, 0.15);
+}
+
+.taxo-box.vertebrados::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, var(--neon-lime), var(--moss-accent));
+}
+
+.taxo-box.invertebrados::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, var(--jungle-gold), var(--tropical-coral));
+}
+
+.taxo-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.25rem;
+}
+
+.taxo-header h3 {
+  font-family: var(--font-heading);
+  font-size: 1.6rem;
+  font-weight: 800;
+}
+
+.taxo-share-badge {
+  background: rgba(0, 255, 135, 0.15);
+  color: var(--neon-lime);
+  border: 1px solid rgba(0, 255, 135, 0.3);
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 800;
+}
+
+.taxo-intro {
+  color: var(--text-muted);
+  font-size: 0.92rem;
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+}
+
+.taxo-subclasses-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.taxo-class-item {
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 0.85rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  transition: var(--transition-smooth);
+}
+
+.taxo-class-item:hover {
+  background: rgba(0, 255, 135, 0.08);
+  border-color: rgba(0, 255, 135, 0.25);
+  transform: translateX(4px);
+}
+
+.class-emoji {
+  font-size: 1.6rem;
+  flex-shrink: 0;
+}
+
+.class-info h4 {
+  font-size: 1rem;
+  color: #ffffff;
+  margin-bottom: 0.15rem;
+}
+
+.class-info p {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+/* ==========================================================================
+   ENCICLOPEDIA INTERACTIVA CON FILTROS Y BUSCADOR
+   ========================================================================== */
+.encyclo-controls {
+  background: var(--bg-jungle-card);
+  border: 1px solid var(--border-emerald);
+  border-radius: 20px;
+  padding: 1.5rem;
+  margin-bottom: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  backdrop-filter: blur(12px);
+}
+
+.search-box-wrap {
+  position: relative;
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.9rem 1.25rem 0.9rem 3rem;
+  background: rgba(4, 20, 11, 0.85);
+  border: 1px solid var(--border-emerald);
+  border-radius: 12px;
+  color: var(--text-main);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  outline: none;
+  transition: var(--transition-smooth);
+}
+
+.search-input:focus {
+  border-color: var(--neon-lime);
+  box-shadow: 0 0 16px rgba(0, 255, 135, 0.3);
+}
+
+.search-icon {
+  position: absolute;
+  top: 50%;
+  left: 1rem;
+  transform: translateY(-50%);
+  font-size: 1.2rem;
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+.filter-chips-row {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.filter-chip {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-emerald);
+  color: var(--text-muted);
+  padding: 0.5rem 1.1rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.filter-chip.active,
+.filter-chip:hover {
+  background: rgba(0, 255, 135, 0.2);
+  border-color: var(--neon-lime);
+  color: var(--neon-lime);
+}
+
+/* Cuadrícula de Tarjetas de Animales */
+.animals-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 1.5rem;
+}
+
+.animal-card {
+  background: var(--bg-jungle-card);
+  border: 1px solid var(--border-emerald);
+  border-radius: 18px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  backdrop-filter: blur(14px);
+  transition: var(--transition-smooth);
+  position: relative;
+  overflow: hidden;
+}
+
+.animal-card:hover {
+  transform: translateY(-5px);
+  border-color: var(--neon-lime);
+  box-shadow: 0 14px 35px rgba(0, 0, 0, 0.7);
+}
+
+.card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.animal-avatar {
+  font-size: 2.6rem;
+  line-height: 1;
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.4));
+}
+
+.group-badge {
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  padding: 0.25rem 0.65rem;
+  border-radius: 20px;
+}
+
+.group-badge.mamifero {
+  background: rgba(250, 204, 21, 0.15);
+  color: var(--jungle-gold);
+  border: 1px solid rgba(250, 204, 21, 0.3);
+}
+
+.group-badge.insecto {
+  background: rgba(0, 255, 135, 0.15);
+  color: var(--neon-lime);
+  border: 1px solid rgba(0, 255, 135, 0.3);
+}
+
+.group-badge.ave {
+  background: rgba(56, 189, 248, 0.15);
+  color: var(--cyan-aquatic);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+}
+
+.group-badge.reptil {
+  background: rgba(163, 230, 53, 0.15);
+  color: var(--moss-accent);
+  border: 1px solid rgba(163, 230, 53, 0.3);
+}
+
+.group-badge.anfibio {
+  background: rgba(52, 211, 153, 0.15);
+  color: #34d399;
+  border: 1px solid rgba(52, 211, 153, 0.3);
+}
+
+.group-badge.marino {
+  background: rgba(14, 165, 233, 0.15);
+  color: #38bdf8;
+  border: 1px solid rgba(14, 165, 233, 0.3);
+}
+
+.animal-name {
+  font-family: var(--font-heading);
+  font-size: 1.35rem;
+  font-weight: 800;
+  margin-bottom: 0.2rem;
+  color: #ffffff;
+}
+
+.animal-scientific {
+  font-size: 0.8rem;
+  font-style: italic;
+  color: var(--text-muted);
+  margin-bottom: 0.85rem;
+}
+
+.animal-props {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 1rem;
+}
+
+.prop-pill {
+  background: rgba(0, 0, 0, 0.3);
+  padding: 0.2rem 0.55rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  color: var(--text-main);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.animal-fact {
+  font-size: 0.86rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+  margin-bottom: 1.25rem;
+}
+
+.btn-card-detail {
+  background: rgba(0, 255, 135, 0.12);
+  border: 1px solid var(--border-emerald);
+  color: var(--neon-lime);
+  width: 100%;
+  padding: 0.65rem 0.75rem;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.btn-card-detail:hover {
+  background: var(--neon-lime);
+  color: #03140c;
+  box-shadow: 0 0 15px rgba(0, 255, 135, 0.4);
+}
+
+/* ==========================================================================
+   SECCIÓN INSECTOS: EL MICRO REINO
+   ========================================================================== */
+.insects-spotlight-card {
+  background: var(--bg-jungle-card);
+  border: 1px solid var(--border-glow);
+  border-radius: 24px;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  backdrop-filter: blur(16px);
+}
+
+.insect-image-box img {
+  width: 100%;
+  height: 100%;
+  min-height: 480px;
+  object-fit: cover;
+  display: block;
+}
+
+.insect-text-box {
+  padding: 3.5rem;
+}
+
+.insect-text-box h3 {
+  font-family: var(--font-heading);
+  font-size: 2.2rem;
+  font-weight: 900;
+  line-height: 1.15;
+  margin-bottom: 1rem;
+}
+
+.insect-text-box p {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  line-height: 1.65;
+  margin-bottom: 1.5rem;
+}
+
+.insect-orders-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.order-mini-card {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--border-emerald);
+  border-radius: 12px;
+  padding: 1rem;
+}
+
+.order-mini-card h4 {
+  font-size: 0.95rem;
+  color: var(--neon-lime);
+  margin-bottom: 0.25rem;
+}
+
+.order-mini-card span {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+/* ==========================================================================
+   SALA DE RÉCORDS ANIMALES
+   ========================================================================== */
+.records-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.record-card {
+  background: var(--bg-jungle-card);
+  border: 1px solid var(--border-emerald);
+  border-radius: 18px;
+  padding: 1.75rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: var(--transition-smooth);
+}
+
+.record-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--neon-lime);
+  box-shadow: var(--card-shadow);
+}
+
+.record-icon {
+  font-size: 2.2rem;
+  margin-bottom: 0.75rem;
+  display: inline-block;
+}
+
+.record-category {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--jungle-gold);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 0.35rem;
+}
+
+.record-holder {
+  font-family: var(--font-heading);
+  font-size: 1.35rem;
+  font-weight: 800;
+  margin-bottom: 0.4rem;
+  color: #ffffff;
+}
+
+.record-stat {
+  font-family: var(--font-heading);
+  font-size: 1.8rem;
+  font-weight: 900;
+  color: var(--neon-lime);
+  margin-bottom: 0.75rem;
+}
+
+.record-desc {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+/* ==========================================================================
+   TRIVIA INTERACTIVA DEL REINO ANIMAL
+   ========================================================================== */
+.trivia-container {
+  background: var(--bg-jungle-card);
+  border: 1px solid var(--border-glow);
+  border-radius: 24px;
+  padding: 2.5rem;
+  max-width: 820px;
+  margin: 0 auto;
+  backdrop-filter: blur(16px);
+}
+
+.trivia-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border-emerald);
+  padding-bottom: 1rem;
+}
+
+.question-text {
+  font-family: var(--font-heading);
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  color: #ffffff;
+}
+
+.options-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.85rem;
+  margin-bottom: 1.5rem;
+}
+
+.option-btn {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-emerald);
+  color: var(--text-main);
+  padding: 1rem 1.25rem;
+  border-radius: 12px;
+  text-align: left;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.option-btn:hover {
+  background: rgba(0, 255, 135, 0.12);
+  border-color: var(--neon-lime);
+}
+
+.option-btn.correct {
+  background: rgba(16, 185, 129, 0.25);
+  border-color: var(--neon-lime);
+  color: #a7f3d0;
+}
+
+.option-btn.incorrect {
+  background: rgba(251, 113, 133, 0.25);
+  border-color: var(--tropical-coral);
+  color: #fecdd3;
+}
+
+.quiz-feedback {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  padding: 1rem;
+  font-size: 0.9rem;
+  display: none;
+  margin-bottom: 1.25rem;
+  border-left: 3px solid var(--neon-lime);
+}
+
+/* ==========================================================================
+   MODAL DE DETALLE DE ANIMAL
+   ========================================================================== */
+.animal-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(2, 13, 7, 0.85);
+  backdrop-filter: blur(10px);
+  z-index: 1000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+
+.animal-modal-overlay.active {
+  display: flex;
+}
+
+.modal-content-card {
+  background: linear-gradient(145deg, #062414, #0b3820);
+  border: 1px solid var(--border-glow);
+  border-radius: 24px;
+  max-width: 620px;
+  width: 100%;
+  padding: 2.25rem;
+  position: relative;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8);
+  animation: modalPop 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes modalPop {
+  from { opacity: 0; transform: scale(0.92); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.modal-close-btn {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.25rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: var(--text-main);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition-smooth);
+}
+
+.modal-close-btn:hover {
+  background: var(--neon-lime);
+  color: #04140b;
+}
+
+.modal-avatar {
+  font-size: 3.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.modal-title {
+  font-family: var(--font-heading);
+  font-size: 1.8rem;
+  color: #ffffff;
+  margin-bottom: 0.25rem;
+}
+
+.modal-scientific {
+  font-style: italic;
+  color: var(--neon-lime);
+  font-size: 0.9rem;
+  margin-bottom: 1.25rem;
+}
+
+.modal-details-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.modal-prop-box {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--border-emerald);
+  border-radius: 10px;
+  padding: 0.75rem;
+}
+
+.modal-prop-lbl {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.modal-prop-val {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: #ffffff;
+}
+
+.modal-bio {
+  color: var(--text-muted);
+  font-size: 0.92rem;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+/* ==========================================================================
+   FOOTER
+   ========================================================================== */
+.site-footer {
+  position: relative;
+  z-index: 10;
+  border-top: 1px solid var(--border-emerald);
+  background: rgba(2, 13, 7, 0.95);
+  padding: 3.5rem 1.5rem;
+  text-align: center;
+}
+
+.footer-quote {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--neon-lime);
+  margin-bottom: 0.5rem;
+}
+
+.footer-desc {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  max-width: 600px;
+  margin: 0 auto 1.5rem;
+}
+
+.footer-copy {
+  font-size: 0.8rem;
+  color: var(--text-dim);
+}
+
+/* ==========================================================================
+   RESPONSIVIDAD
+   ========================================================================== */
+@media (max-width: 1024px) {
+  .hero {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+  .hero-image-card img {
+    height: 350px;
+  }
+  .taxo-comparison-grid {
+    grid-template-columns: 1fr;
+  }
+  .insects-spotlight-card {
+    grid-template-columns: 1fr;
+  }
+  .insect-image-box img {
+    height: 320px;
+    min-height: auto;
+  }
+  .insect-text-box {
+    padding: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 2.4rem;
+  }
+  .hero-stats-grid {
+    grid-template-columns: 1fr;
+  }
+  .main-nav {
+    display: none;
+  }
+  .modal-details-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reino Animal: Enciclopedia de la Biodiversidad | Vertebrados, Mamíferos e Insectos</title>
+
+  <!-- Metadatos SEO -->
+  <meta name="description"
+    content="Explora la gran enciclopedia viva del reino animal: vertebrados (mamíferos, aves, reptiles, anfibios, peces) e invertebrados (insectos, moluscos y más) en un entorno verde y natural.">
+  <meta name="keywords"
+    content="Reino animal, vertebrados, invertebrados, mamíferos, insectos, biodiversidad, zoología, aves, reptiles, anfibios, fauna silvestre">
+  <meta name="author" content="Antigravity Web Studio">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Reino Animal: Enciclopedia de la Biodiversidad">
+  <meta property="og:description"
+    content="Descubre todos los grupos animales: mamíferos, insectos, aves, reptiles y criaturas marinas con fichas zoológicas y trivia interactiva.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="assets/biodiversidad_hero.jpg">
+
+  <!-- Favicon SVG -->
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌿</text></svg>">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+
+  <!-- Hoja de estilos con fondo verde selva -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+  <!-- Fondo Ambiental Verde Selva -->
+  <div class="jungle-ambient-bg" aria-hidden="true"></div>
+
+  <!-- BARRA SUPERIOR DE BIODIVERSIDAD -->
+  <aside class="top-notice-bar" aria-label="Biodiversidad en vivo">
+    <div class="notice-badge">
+      <span class="leaf-pulse">🍃</span>
+      <span>Enciclopedia Zoológica • Más de 1.5 millones de especies documentadas en la Tierra</span>
+    </div>
+
+    <div class="top-bar-actions">
+      <!-- Botón de Sonido de la Selva -->
+      <button class="btn-nature-sound" id="natureAudioBtn" title="Activar sonido ambiental de la selva"
+        aria-label="Sonido de la naturaleza">
+        <span>🌿</span> Sonido de la Selva
+      </button>
+    </div>
+  </aside>
+
+  <!-- HEADER Y NAVEGACIÓN -->
+  <header class="main-header">
+    <a href="#inicio" class="brand-wrap" aria-label="Ir al inicio">
+      <div class="brand-icon-box">
+        <span>🐾</span>
+      </div>
+      <div class="brand-text">
+        <h1>REINO ANIMAL</h1>
+        <span>BIODIVERSIDAD & NATURALEZA</span>
+      </div>
+    </a>
+
+    <nav class="main-nav" aria-label="Navegación del sitio">
+      <ul>
+        <li><a href="#clasificacion">Clasificación</a></li>
+        <li><a href="#enciclopedia">Enciclopedia</a></li>
+        <li><a href="#insectos">Insectos</a></li>
+        <li><a href="#records">Récords</a></li>
+        <li><a href="#trivia">Trivia</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <!-- HERO SECTION -->
+    <section class="hero" id="inicio">
+      <div class="hero-content">
+        <div class="hero-tag">
+          <span>🌿</span> Fauna Terrestre y Marina
+        </div>
+        <h2 class="hero-title">
+          La maravillosa diversidad del <span class="highlight-lime">Reino Animal</span>
+        </h2>
+        <p class="hero-desc">
+          Desde los imponentes mamíferos y cazadores selváticos hasta los asombrosos insectos con exoesqueletos de
+          quitina y criaturas abisales. Conoce la taxonomía, adaptaciones y secretos biológicos de todas las especies
+          que habitan nuestro planeta.
+        </p>
+
+        <!-- Métricas Rápidas -->
+        <div class="hero-stats-grid">
+          <div class="stat-card">
+            <div class="stat-num">+1.5M</div>
+            <div class="stat-label">Especies conocidas</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num">95%</div>
+            <div class="stat-label">Son Invertebrados</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num">5 Grupos</div>
+            <div class="stat-label">Vertebrados Mayores</div>
+          </div>
+        </div>
+
+        <div class="hero-actions">
+          <a href="#enciclopedia" class="btn btn-primary" id="btnHeroExplorar">
+            <span>🦁</span> Explorar Animales
+          </a>
+          <a href="#clasificacion" class="btn btn-secondary" id="btnHeroClasificacion">
+            <span>🧬</span> Vertebrados vs Invertebrados
+          </a>
+        </div>
+      </div>
+
+      <!-- Tarjeta Visual del Hero con Imagen de Biodiversidad Selvática -->
+      <div class="hero-media-wrapper">
+        <div class="hero-image-card">
+          <img src="assets/biodiversidad_hero.jpg"
+            alt="Ecosistema de selva verde esmeralda con jaguar, tucán, rana de ojos rojos y mariposas tropicales bajo rayos de sol"
+            loading="eager">
+          <div class="hero-image-overlay">
+            <span class="overlay-badge">Bioma de Selva Tropical</span>
+            <p class="overlay-caption">"El dosel de la selva alberga más del 50% de las especies animales del planeta."
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- EL GRAN ÁRBOL TAXONÓMICO: VERTEBRADOS VS INVERTEBRADOS -->
+    <section class="section" id="clasificacion">
+      <div class="section-header">
+        <span class="section-tag">Estructura Biológica</span>
+        <h2 class="section-title">El Gran Árbol del Reino Animal</h2>
+        <p class="section-desc">
+          Los animales se dividen fundamentalmente según la presencia o ausencia de columna vertebral y esqueleto
+          interno.
+        </p>
+      </div>
+
+      <div class="taxo-comparison-grid">
+        <!-- Caja 1: Vertebrados -->
+        <article class="taxo-box vertebrados">
+          <div class="taxo-header">
+            <h3>🦴 Animales Vertebrados</h3>
+            <span class="taxo-share-badge">~5% de las Especies</span>
+          </div>
+          <p class="taxo-intro">
+            Poseen un esqueleto interno óseo o cartilaginoso articulado, con un cráneo que protege el cerebro y una
+            médula espinal dorsal protegida por la columna vertebral.
+          </p>
+
+          <div class="taxo-subclasses-list">
+            <div class="taxo-class-item">
+              <span class="class-emoji">🐆</span>
+              <div class="class-info">
+                <h4>Mamíferos (Mammalia)</h4>
+                <p>Cuerpo cubierto de pelo, glándulas mamarias productoras de leche, respiración pulmonar, vivíparos y
+                  temperatura constante (endotermos).</p>
+              </div>
+            </div>
+
+            <div class="taxo-class-item">
+              <span class="class-emoji">🦅</span>
+              <div class="class-info">
+                <h4>Aves (Aves)</h4>
+                <p>Cuerpo cubierto de plumas, extremidades anteriores transformadas en alas, pico córneo sin dientes y
+                  huesos neumáticos ligeros.</p>
+              </div>
+            </div>
+
+            <div class="taxo-class-item">
+              <span class="class-emoji">🦎</span>
+              <div class="class-info">
+                <h4>Reptiles (Reptilia)</h4>
+                <p>Piel seca recubierta de escamas de queratina, huevos amnióticos con cáscara protectora y sangre fría
+                  (poiquilotermos).</p>
+              </div>
+            </div>
+
+            <div class="taxo-class-item">
+              <span class="class-emoji">🐸</span>
+              <div class="class-info">
+                <h4>Anfibios (Amphibia)</h4>
+                <p>Piel húmeda y permeable sin escamas, ciclo de vida con metamorfosis de larva acuática con branquias a
+                  adulto con respiración pulmonar/cutánea.</p>
+              </div>
+            </div>
+
+            <div class="taxo-class-item">
+              <span class="class-emoji">🦈</span>
+              <div class="class-info">
+                <h4>Peces (Osteíctios y Condrictios)</h4>
+                <p>Vertebrados estrictamente acuáticos, con respiración branquial, aletas y cuerpo usualmente cubierto
+                  de escamas dérmicas.</p>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Caja 2: Invertebrados -->
+        <article class="taxo-box invertebrados">
+          <div class="taxo-header">
+            <h3>🪲 Animales Invertebrados</h3>
+            <span class="taxo-share-badge"
+              style="background: rgba(250, 204, 21, 0.15); color: var(--jungle-gold); border-color: rgba(250, 204, 21, 0.3);">~95%
+              de las Especies</span>
+          </div>
+          <p class="taxo-intro">
+            Carecen de columna vertebral y esqueleto óseo interno. Son el grupo más antiguo, exitoso y numéricamente
+            dominante de la Tierra.
+          </p>
+
+          <div class="taxo-subclasses-list">
+            <div class="taxo-class-item">
+              <span class="class-emoji">🐞</span>
+              <div class="class-info">
+                <h4>Insectos (Insecta)</h4>
+                <p>Cuerpo dividido en cabeza, tórax y abdomen, exactamente 6 patas articuladas, un par de antenas y la
+                  mayoría con alas funcionales.</p>
+              </div>
+            </div>
+
+            <div class="taxo-class-item">
+              <span class="class-emoji">🕷️</span>
+              <div class="class-info">
+                <h4>Arácnidos (Arachnida)</h4>
+                <p>Poseen 8 patas, cuerpo dividido en cefalotórax y abdomen, quelíceros con veneno y carecen de antenas
+                  y alas (arañas y escorpiones).</p>
+              </div>
+            </div>
+
+            <div class="taxo-class-item">
+              <span class="class-emoji">🐙</span>
+              <div class="class-info">
+                <h4>Moluscos (Mollusca)</h4>
+                <p>Cuerpo blando y musculoso, a menudo protegido por una concha calcárea (caracoles, almejas) o
+                  cefalópodos inteligentes con tentáculos (pulpos, calamares).</p>
+              </div>
+            </div>
+
+            <div class="taxo-class-item">
+              <span class="class-emoji">🦀</span>
+              <div class="class-info">
+                <h4>Crustáceos (Crustacea)</h4>
+                <p>Exoesqueleto articulado rico en carbonato de calcio, apéndices birrámeos y vida mayoritariamente
+                  acuática (cangrejos, langostas, camarones).</p>
+              </div>
+            </div>
+
+            <div class="taxo-class-item">
+              <span class="class-emoji">🪼</span>
+              <div class="class-info">
+                <h4>Cnidarios y Equinodermos</h4>
+                <p>Medusas, anémonas y corales dotados de células urticantes (cnidocitos), junto a estrellas y erizos de
+                  mar con simetría pentarradial.</p>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ENCICLOPEDIA INTERACTIVA CON FILTROS Y BUSCADOR -->
+    <section class="section" id="enciclopedia">
+      <div class="section-header">
+        <span class="section-tag">Explorador de Especies</span>
+        <h2 class="section-title">Enciclopedia Viva del Reino Animal</h2>
+        <p class="section-desc">
+          Filtra por clase biológica o busca por nombre común o científico para descubrir los secretos de cada criatura.
+        </p>
+      </div>
+
+      <!-- Barra de Filtros y Búsqueda -->
+      <div class="encyclo-controls">
+        <div class="search-box-wrap">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="animalSearchInput" class="search-input"
+            placeholder="Buscar por nombre (ej: Jaguar, Hércules, Ballena, Águila, Pulpo, Ajolote)...">
+        </div>
+
+        <div class="filter-chips-row">
+          <button class="filter-chip active" data-filter="todos">🌍 Todos</button>
+          <button class="filter-chip" data-filter="mamifero">🐆 Mamíferos</button>
+          <button class="filter-chip" data-filter="insecto">🪲 Insectos</button>
+          <button class="filter-chip" data-filter="ave">🦅 Aves</button>
+          <button class="filter-chip" data-filter="reptil">🦎 Reptiles</button>
+          <button class="filter-chip" data-filter="anfibio">🐸 Anfibios</button>
+          <button class="filter-chip" data-filter="marino">🐙 Vida Marina</button>
+        </div>
+      </div>
+
+      <!-- Cuadrícula de Tarjetas de Animales -->
+      <div class="animals-grid" id="animalsGrid">
+        <!-- Renderizado dinámicamente con JavaScript -->
+      </div>
+    </section>
+
+    <!-- ENFOQUE ESPECIAL: EL ASOMBROSO REINO DE LOS INSECTOS -->
+    <section class="section" id="insectos">
+      <div class="insects-spotlight-card">
+        <div class="insect-image-box">
+          <img src="assets/insectos_macro.jpg"
+            alt="Macro fotografía de escarabajo esmeralda iridiscente y mariposa de alas de cristal sobre una hoja tropical con gotas de rocío"
+            loading="lazy">
+        </div>
+        <div class="insect-text-box">
+          <span class="section-tag">El Microcosmos Verde</span>
+          <h3>¿Por qué los Insectos Dominan el Planeta?</h3>
+          <p>
+            Los insectos aparecieron hace más de 400 millones de años, mucho antes que los primeros dinosaurios. Con más
+            de 1 millón de especies descritas y millones más por descubrir, representan el grupo más diverso y adaptado
+            de toda la biosfera.
+          </p>
+
+          <div class="insect-orders-grid">
+            <div class="order-mini-card">
+              <h4>🪲 Coleópteros</h4>
+              <span>Escarabajos: 400.000 especies con élitros duros como armaduras protectoras.</span>
+            </div>
+            <div class="order-mini-card">
+              <h4>🦋 Lepidópteros</h4>
+              <span>Mariposas y polillas con alas cubiertas de escamas microscópicas de color y camuflaje.</span>
+            </div>
+            <div class="order-mini-card">
+              <h4>🐝 Himenópteros</h4>
+              <span>Hormigas, abejas y avispas con estructuras sociales ultra complejas y reinas.</span>
+            </div>
+            <div class="order-mini-card">
+              <h4>🪰 Odonatos</h4>
+              <span>Libélulas y caballitos del diablo con visión de 360° y vuelo acrobático multidireccional.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SALA DE RÉCORDS DEL REINO ANIMAL -->
+    <section class="section" id="records">
+      <div class="section-header">
+        <span class="section-tag">Proezas de la Evolución</span>
+        <h2 class="section-title">Récords Absolutos del Reino Animal</h2>
+        <p class="section-desc">
+          Superando las leyes de la física y la resistencia biológica: conoce a los campeones mundiales de la
+          naturaleza.
+        </p>
+      </div>
+
+      <div class="records-grid">
+        <article class="record-card">
+          <div>
+            <span class="record-icon">⚡</span>
+            <div class="record-category">Más Veloz en el Aire</div>
+            <h3 class="record-holder">Halcón Peregrino</h3>
+            <div class="record-stat">390 km/h</div>
+          </div>
+          <p class="record-desc">
+            En su ataque en picada cerrada contra palomas y patos, alcanza velocidades supersónicas con control
+            aerodinámico absoluto.
+          </p>
+        </article>
+
+        <article class="record-card">
+          <div>
+            <span class="record-icon">🐆</span>
+            <div class="record-category">Más Veloz en Tierra</div>
+            <h3 class="record-holder">Guepardo (Chita)</h3>
+            <div class="record-stat">120 km/h</div>
+          </div>
+          <p class="record-desc">
+            Acelera de 0 a 100 km/h en solo 3 segundos, más veloz que la inmensa mayoría de los autos deportivos
+            modernos.
+          </p>
+        </article>
+
+        <article class="record-card">
+          <div>
+            <span class="record-icon">🐋</span>
+            <div class="record-category">El Más Grande de la Historia</div>
+            <h3 class="record-holder">Ballena Azul</h3>
+            <div class="record-stat">180 Toneladas</div>
+          </div>
+          <p class="record-desc">
+            Su lengua sola pesa tanto como un elefante adulto entero y su arteria aorta es tan ancha que un niño podría
+            nadar en ella.
+          </p>
+        </article>
+
+        <article class="record-card">
+          <div>
+            <span class="record-icon">💪</span>
+            <div class="record-category">Fuerza Proporcional Máxima</div>
+            <h3 class="record-holder">Escarabajo Pelotero</h3>
+            <div class="record-stat">1.141x su peso</div>
+          </div>
+          <p class="record-desc">
+            Equivale a que un ser humano común levantara seis autobuses de dos pisos llenos de pasajeros sin
+            despeinarse.
+          </p>
+        </article>
+
+        <article class="record-card">
+          <div>
+            <span class="record-icon">⏳</span>
+            <div class="record-category">Vertebrado Más Longevo</div>
+            <h3 class="record-holder">Tiburón de Groenlandia</h3>
+            <div class="record-stat">+400 Años</div>
+          </div>
+          <p class="record-desc">
+            Habitante de las aguas heladas del Ártico. No alcanza la madurez sexual hasta cumplir los 150 años de edad.
+          </p>
+        </article>
+
+        <article class="record-card">
+          <div>
+            <span class="record-icon">🐙</span>
+            <div class="record-category">Inteligencia Invertebrada</div>
+            <h3 class="record-holder">Pulpo Mimético</h3>
+            <div class="record-stat">9 Cerebros</div>
+          </div>
+          <p class="record-desc">
+            Posee un cerebro central y ganglios cerebrales independientes en cada brazo, permitiendo aprendizaje por
+            observación y resolución de acertijos.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <!-- TRIVIA INTERACTIVA -->
+    <section class="section" id="trivia">
+      <div class="section-header">
+        <span class="section-tag">Desafío Zoológico</span>
+        <h2 class="section-title">Trivia: ¿Cuánto Sabes de Animales?</h2>
+        <p class="section-desc">
+          Pon a prueba tu conocimiento sobre vertebrados, insectos y adaptaciones asombrosas.
+        </p>
+      </div>
+
+      <div class="trivia-container">
+        <div class="trivia-header">
+          <span style="font-weight: 800; color: var(--neon-lime);">Pregunta de Zoología</span>
+          <span id="quizScoreEl" style="font-weight: 800; font-family: var(--font-heading); color: #ffffff;">Puntaje: 0
+            / 4</span>
+        </div>
+
+        <h3 class="question-text" id="quizQuestionText">Cargando pregunta...</h3>
+
+        <div class="options-grid" id="quizOptionsGrid">
+          <!-- Opciones dinámicas -->
+        </div>
+
+        <div class="quiz-feedback" id="quizFeedback"></div>
+
+        <div style="text-align: right;">
+          <button class="btn btn-primary" id="quizNextBtn" style="display: none;">
+            Siguiente Pregunta →
+          </button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- MODAL DE FICHA ZOOLOGICA COMPLETA -->
+  <div class="animal-modal-overlay" id="animalModalOverlay" role="dialog" aria-modal="true"
+    aria-labelledby="modalTitle">
+    <div class="modal-content-card">
+      <button class="modal-close-btn" id="modalCloseBtn" aria-label="Cerrar ventana">✕</button>
+      <div class="modal-avatar" id="modalAvatar">🐆</div>
+      <h3 class="modal-title" id="modalTitle">Nombre del Animal</h3>
+      <div class="modal-scientific" id="modalScientific">Nombre Científico • Clase</div>
+
+      <div class="modal-details-grid">
+        <div class="modal-prop-box">
+          <div class="modal-prop-lbl">Hábitat Natural</div>
+          <div class="modal-prop-val" id="modalHabitat">Selva Tropical</div>
+        </div>
+        <div class="modal-prop-box">
+          <div class="modal-prop-lbl">Tipo de Dieta</div>
+          <div class="modal-prop-val" id="modalDiet">Carnívoro</div>
+        </div>
+        <div class="modal-prop-box">
+          <div class="modal-prop-lbl">Dimensiones</div>
+          <div class="modal-prop-val" id="modalSize">1.5 metros</div>
+        </div>
+        <div class="modal-prop-box">
+          <div class="modal-prop-lbl">Estado de Conservación</div>
+          <div class="modal-prop-val" id="modalConservation" style="color: var(--neon-lime);">Preocupación Menor</div>
+        </div>
+      </div>
+
+      <p class="modal-bio" id="modalBio">Descripción zoológica detallada...</p>
+      <div
+        style="background: rgba(0, 0, 0, 0.3); border-left: 3px solid var(--neon-lime); padding: 0.85rem; border-radius: 8px; font-size: 0.88rem; color: #ffffff;"
+        id="modalSuperpower">
+        ⚡ Superpoder evolutivo...
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <p class="footer-quote">
+      "La grandeza de una nación y su progreso moral pueden ser juzgados por la forma en que sus animales son tratados."
+      — Mahatma Gandhi
+    </p>
+    <p class="footer-desc">
+      Portal educativo dedicado al conocimiento, conservación y divulgación científica de la fauna mundial y la
+      biodiversidad de los biomas de la Tierra.
+    </p>
+    <div class="footer-copy">
+      Desarrollado con pasión por la vida animal • Antigravity Web Studio
+    </div>
+  </footer>
+
+  <!-- Script interactivo -->
+  <script src="script.js"></script>
+</body>
+
+</html>
+
+
+/**
+ * ============================================================================
+ * REINO ANIMAL - SCRIPT INTERACTIVO
+ * Base de datos biológica, filtro dinámico, buscador en vivo,
+ * modal de fichas zoológicas, trivia y sonidos de la selva sintetizados.
+ * ============================================================================
+ */
+
+document.addEventListener('DOMContentLoaded', () => {
+  // --------------------------------------------------------------------------
+  // 1. SISTEMA DE AUDIO DE LA SELVA SINTETIZADO (Web Audio API)
+  // --------------------------------------------------------------------------
+  let audioCtx = null;
+  let isJungleSoundPlaying = false;
+  let jungleInterval = null;
+
+  function initAudio() {
+    if (!audioCtx) {
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      if (AudioContext) {
+        audioCtx = new AudioContext();
+      }
+    }
+    if (audioCtx && audioCtx.state === 'suspended') {
+      audioCtx.resume();
+    }
+  }
+
+  // Canto de grillo / insecto nocturno sintetizado
+  function playCricketChirp() {
+    if (!audioCtx) return;
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+
+    osc.type = 'triangle';
+    const now = audioCtx.currentTime;
+    osc.frequency.setValueAtTime(4500, now);
+    osc.frequency.exponentialRampToValueAtTime(5200, now + 0.04);
+    osc.frequency.exponentialRampToValueAtTime(4500, now + 0.08);
+
+    gain.gain.setValueAtTime(0.05, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+
+    osc.start(now);
+    osc.stop(now + 0.08);
+  }
+
+  // Canto de ave tropical suave sintetizado
+  function playTropicalBirdChirp() {
+    if (!audioCtx) return;
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+
+    osc.type = 'sine';
+    const now = audioCtx.currentTime;
+    osc.frequency.setValueAtTime(2200, now);
+    osc.frequency.exponentialRampToValueAtTime(3100, now + 0.12);
+    osc.frequency.exponentialRampToValueAtTime(2600, now + 0.22);
+
+    gain.gain.setValueAtTime(0.08, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+
+    osc.start(now);
+    osc.stop(now + 0.22);
+  }
+
+  // Sonido de click / interacción suave
+  function playSoftClick() {
+    initAudio();
+    if (!audioCtx) return;
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+
+    osc.type = 'sine';
+    const now = audioCtx.currentTime;
+    osc.frequency.setValueAtTime(580, now);
+    osc.frequency.exponentialRampToValueAtTime(240, now + 0.06);
+
+    gain.gain.setValueAtTime(0.15, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
+
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+
+    osc.start(now);
+    osc.stop(now + 0.06);
+  }
+
+  // Sonido de logro / acierto
+  function playSuccessChime() {
+    initAudio();
+    if (!audioCtx) return;
+    const notes = [392.00, 523.25, 659.25, 783.99]; // G4, C5, E5, G5
+    notes.forEach((freq, idx) => {
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      const startTime = audioCtx.currentTime + idx * 0.07;
+
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(freq, startTime);
+
+      gain.gain.setValueAtTime(0.18, startTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, startTime + 0.3);
+
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+
+      osc.start(startTime);
+      osc.stop(startTime + 0.3);
+    });
+  }
+
+  // Toggle de ambiente de la selva
+  const natureAudioBtn = document.getElementById('natureAudioBtn');
+  if (natureAudioBtn) {
+    natureAudioBtn.addEventListener('click', () => {
+      initAudio();
+      if (!isJungleSoundPlaying) {
+        isJungleSoundPlaying = true;
+        natureAudioBtn.classList.add('playing');
+        natureAudioBtn.innerHTML = '<span>🦗</span> Selva Activa';
+
+        // Disparar sonidos aleatorios de insectos y aves periódicamente
+        jungleInterval = setInterval(() => {
+          if (Math.random() > 0.4) {
+            playCricketChirp();
+          }
+          if (Math.random() > 0.6) {
+            setTimeout(playTropicalBirdChirp, 300);
+          }
+        }, 1200);
+      } else {
+        isJungleSoundPlaying = false;
+        clearInterval(jungleInterval);
+        natureAudioBtn.classList.remove('playing');
+        natureAudioBtn.innerHTML = '<span>🌿</span> Sonido de la Selva';
+      }
+    });
+  }
+
+  // --------------------------------------------------------------------------
+  // 2. BASE DE DATOS DE ANIMALES
+  // --------------------------------------------------------------------------
+  const animalsDatabase = [
+    // Mamíferos
+    {
+      id: 'jaguar',
+      name: 'Jaguar',
+      scientific: 'Panthera onca',
+      group: 'mamifero',
+      groupLabel: 'Mamífero Vertebrado',
+      emoji: '🐆',
+      habitat: 'Selvas tropicales de América',
+      diet: 'Carnívoro estricto',
+      size: '1.2 - 1.8 m | 60 - 100 kg',
+      conservation: 'Casi Amenazado (UICN)',
+      summary: 'El mayor felino de América. Posee la mordida más poderosa entre todos los grandes felinos, capaz de perforar caparazones de tortugas.',
+      superpower: 'Mordida demoledora capaz de atravesar cráneos directamente.',
+      lifespan: '12 a 15 años en libertad'
+    },
+    {
+      id: 'ballena-azul',
+      name: 'Ballena Azul',
+      scientific: 'Balaenoptera musculus',
+      group: 'mamifero',
+      groupLabel: 'Mamífero Vertebrado',
+      emoji: '🐋',
+      habitat: 'Océanos de todo el mundo',
+      diet: 'Carnívoro filtrador (Krill)',
+      size: '25 - 30 metros | Hasta 180 toneladas',
+      conservation: 'En Peligro (UICN)',
+      summary: 'El animal más grande que jamás haya existido en la historia del planeta Tierra, superando incluso a los dinosaurios más colosales.',
+      superpower: 'Su corazón pesa 180 kg (el tamaño de un automóvil pequeño) y sus cantos viajan cientos de kilómetros bajo el mar.',
+      lifespan: '80 a 90 años'
+    },
+    {
+      id: 'murcielago',
+      name: 'Murciélago Vampiro',
+      scientific: 'Desmodus rotundus',
+      group: 'mamifero',
+      groupLabel: 'Mamífero Vertebrado',
+      emoji: '🦇',
+      habitat: 'Bosques y cavernas tropicales',
+      diet: 'Hematófago (sangre)',
+      size: '7 - 9 cm | 25 - 40 gramos',
+      conservation: 'Preocupación Menor',
+      summary: 'Los murciélagos son los únicos mamíferos capaces de volar de forma activa y sustentada. Este posee saliva con anticoagulantes medicinales (draculina).',
+      superpower: 'Ecolocalización acústica milimétrica en total oscuridad.',
+      lifespan: '9 a 12 años'
+    },
+    {
+      id: 'ornitorrinco',
+      name: 'Ornitorrinco',
+      scientific: 'Ornithorhynchus anatinus',
+      group: 'mamifero',
+      groupLabel: 'Mamífero Monotrema',
+      emoji: '🦆',
+      habitat: 'Ríos de Australia y Tasmania',
+      diet: 'Carnívoro (insectos y crustáceos)',
+      size: '40 - 50 cm | 1 - 2.5 kg',
+      conservation: 'Casi Amenazado',
+      summary: 'Uno de los animales más insólitos del mundo: es mamífero pero pone huevos, tiene pico de pato, cola de castor y los machos poseen espolones venenosos.',
+      superpower: 'Electrorrecepción en el pico para detectar presas en aguas turbias con los ojos cerrados.',
+      lifespan: '15 a 17 años'
+    },
+    {
+      id: 'elefante-africano',
+      name: 'Elefante Africano',
+      scientific: 'Loxodonta africana',
+      group: 'mamifero',
+      groupLabel: 'Mamífero Vertebrado',
+      emoji: '🐘',
+      habitat: 'Sabanas y bosques de África',
+      diet: 'Herbívoro voraz (150 kg/día)',
+      size: '3 - 4 metros de altura | 6 toneladas',
+      conservation: 'En Peligro (UICN)',
+      summary: 'El animal terrestre viviente más grande. Su trompa contiene más de 40.000 músculos independientes y posee una memoria y empatía social asombrosa.',
+      superpower: 'Comunicación por infrasonidos subterráneos que detectan con las almohadillas de sus patas.',
+      lifespan: '60 a 70 años'
+    },
+
+    // Insectos
+    {
+      id: 'escarabajo-hercules',
+      name: 'Escarabajo Hércules',
+      scientific: 'Dynastes hercules',
+      group: 'insecto',
+      groupLabel: 'Insecto Invertebrado',
+      emoji: '🪲',
+      habitat: 'Selvas tropicales húmedas',
+      diet: 'Herbívoro (fruta madura y savia)',
+      size: 'Hasta 17 cm con cuerno',
+      conservation: 'Preocupación Menor',
+      summary: 'Uno de los insectos más fuertes del planeta proporcional a su tamaño: es capaz de levantar y transportar más de 850 veces su propio peso.',
+      superpower: 'Su caparazón cambia de verde oliva a negro azabache según la humedad del aire.',
+      lifespan: 'Hasta 2 años como larva, 6 meses como adulto'
+    },
+    {
+      id: 'mariposa-cristal',
+      name: 'Mariposa Alas de Cristal',
+      scientific: 'Greta oto',
+      group: 'insecto',
+      groupLabel: 'Insecto Invertebrado',
+      emoji: '🦋',
+      habitat: 'Bosques lluviosos de Centro y Sudamérica',
+      diet: 'Nectarívora',
+      size: '5.5 - 6 cm de envergadura',
+      conservation: 'Preocupación Menor',
+      summary: 'Sus alas carecen de escamas de color y tienen nanoestructuras que impiden el reflejo de la luz, volviéndolas completamente transparentes como el vidrio.',
+      superpower: 'Invisibilidad óptica en vuelo que confunde por completo a aves y depredadores.',
+      lifespan: '6 a 12 semanas'
+    },
+    {
+      id: 'abeja-melifera',
+      name: 'Abeja Melífera',
+      scientific: 'Apis mellifera',
+      group: 'insecto',
+      groupLabel: 'Insecto Invertebrado',
+      emoji: '🐝',
+      habitat: 'Praderas y campos de todo el mundo',
+      diet: 'Néctar y polen floral',
+      size: '12 - 15 mm',
+      conservation: 'Vital para la humanidad',
+      summary: 'Considerada por la ciencia como el ser vivo más importante del planeta debido a que de su labor de polinización depende más del 70% de la agricultura mundial.',
+      superpower: 'La "danza del meneo", un lenguaje geométrico para indicar la posición exacta de flores a kilómetros.',
+      lifespan: 'Obreras: 6 semanas | Reina: 3 a 5 años'
+    },
+    {
+      id: 'libelula-emperador',
+      name: 'Libélula Emperador',
+      scientific: 'Anax imperator',
+      group: 'insecto',
+      groupLabel: 'Insecto Invertebrado',
+      emoji: '🪰',
+      habitat: 'Lagos, humedales y ríos',
+      diet: 'Carnívoro voraz (mosquitos y moscas)',
+      size: '7 - 8 cm de longitud',
+      conservation: 'Preocupación Menor',
+      summary: 'Uno de los cazadores más eficientes del reino animal: tiene una tasa de éxito de captura del 95% (muy superior al león o al tiburón).',
+      superpower: 'Ojos con 30.000 facetas que ofrecen visión panorámica de 360° y vuelo en cualquier dirección sin girar el cuerpo.',
+      lifespan: 'Hasta 2 años como ninfa acuática, 2 meses adulta'
+    },
+    {
+      id: 'mantis-religiosa',
+      name: 'Mantis Religiosa',
+      scientific: 'Mantis religiosa',
+      group: 'insecto',
+      groupLabel: 'Insecto Invertebrado',
+      emoji: '🦗',
+      habitat: 'Zonas templadas y cálidas de vegetación',
+      diet: 'Carnívoro emboscador',
+      size: '5 - 8 cm',
+      conservation: 'Preocupación Menor',
+      summary: 'Depredador temible que caza por sorpresa utilizando patas delanteras raptoras cubiertas de espinas que se disparan en milisegundos.',
+      superpower: 'Único insecto conocido con un solo oído en el centro del pecho y cabeza móvil que gira 180°.',
+      lifespan: '6 a 9 meses'
+    },
+
+    // Aves
+    {
+      id: 'halcon-peregrino',
+      name: 'Halcón Peregrino',
+      scientific: 'Falco peregrinus',
+      group: 'ave',
+      groupLabel: 'Ave Vertebrada',
+      emoji: '🦅',
+      habitat: 'Acantilados y rascacielos globales',
+      diet: 'Carnívoro aéreo (otras aves)',
+      size: 'Envergadura de 1 metro | 1 kg',
+      conservation: 'Preocupación Menor',
+      summary: 'El animal más rápido del planeta. Al lanzarse en picada para cazar a sus presas en pleno vuelo, supera los 390 km/h.',
+      superpower: 'Fosas nasales cónicas especiales que regulan la presión del aire para poder respirar a casi 400 km/h.',
+      lifespan: '15 a 20 años'
+    },
+    {
+      id: 'tucan-pico-iris',
+      name: 'Tucán Pico Iris',
+      scientific: 'Ramphastos sulfuratus',
+      group: 'ave',
+      groupLabel: 'Ave Vertebrada',
+      emoji: '🦜',
+      habitat: 'Selvas tropicales del Neotrópico',
+      diet: 'Frugívoro y oportunista',
+      size: '45 - 50 cm con pico',
+      conservation: 'Preocupación Menor',
+      summary: 'Famoso por su pico multicolor que puede medir un tercio de su cuerpo. A pesar de parecer pesado, es hueco por dentro y actúa como radiador térmico.',
+      superpower: 'Termorregulación avanzada: irradia exceso de calor a través de su pico esponjoso.',
+      lifespan: '18 a 20 años'
+    },
+
+    // Reptiles
+    {
+      id: 'camaleon-pantera',
+      name: 'Camaleón Pantera',
+      scientific: 'Furcifer pardalis',
+      group: 'reptil',
+      groupLabel: 'Reptil Vertebrado',
+      emoji: '🦎',
+      habitat: 'Selvas costeras de Madagascar',
+      diet: 'Insectívoro',
+      size: '35 - 50 cm',
+      conservation: 'Preocupación Menor',
+      summary: 'Maestro de la adaptación cromática. Cambia de color mediante nanocristales bajo su piel según su estado de ánimo, temperatura y comunicación.',
+      superpower: 'Lengua retráctil que se dispara a 26 veces la aceleración de la gravedad y ojos con movimiento independiente.',
+      lifespan: '5 a 7 años'
+    },
+    {
+      id: 'dragon-komodo',
+      name: 'Dragón de Komodo',
+      scientific: 'Varanus komodoensis',
+      group: 'reptil',
+      groupLabel: 'Reptil Vertebrado',
+      emoji: '🐊',
+      habitat: 'Islas de Indonesia',
+      diet: 'Carnívoro ápice (ciervos y búfalos)',
+      size: '2.5 - 3 metros | 70 - 90 kg',
+      conservation: 'En Peligro (UICN)',
+      summary: 'El lagarto más grande del planeta. Posee glándulas que secretan toxinas anticoagulantes para abatir presas diez veces más pesadas.',
+      superpower: 'Capacidad de oler carroña a más de 9 kilómetros de distancia usando su lengua bífida.',
+      lifespan: '30 a 50 años'
+    },
+
+    // Anfibios
+    {
+      id: 'rana-dardo',
+      name: 'Rana Dardo Dorada',
+      scientific: 'Phyllobates terribilis',
+      group: 'anfibio',
+      groupLabel: 'Anfibio Vertebrado',
+      emoji: '🐸',
+      habitat: 'Selva húmeda del Chocó, Colombia',
+      diet: 'Insectívoro (hormigas y ácaros)',
+      size: 'Apenas 5 cm | 30 gramos',
+      conservation: 'En Peligro Crítico',
+      summary: 'El vertebrado más venenoso del planeta. La batracotoxina presente en su piel dorada es suficiente para liquidar a 10 personas adultas.',
+      superpower: 'Su veneno lo obtiene de los escarabajos y hormigas que ingiere en su hábitat salvaje.',
+      lifespan: '10 a 15 años'
+    },
+    {
+      id: 'ajolote',
+      name: 'Ajolote Mexicano',
+      scientific: 'Ambystoma mexicanum',
+      group: 'anfibio',
+      groupLabel: 'Anfibio Vertebrado',
+      emoji: '🦎',
+      habitat: 'Canales de Xochimilco, México',
+      diet: 'Carnívoro de agua dulce',
+      size: '15 - 30 cm',
+      conservation: 'En Peligro Crítico (UICN)',
+      summary: 'Famoso por su eterna juventud biológica (neotenia): conserva sus branquias externas de larva toda la vida y es capaz de regenerar extremidades completas.',
+      superpower: 'Regeneración celular perfecta: puede recrear patas amputadas, médula espinal e incluso partes del corazón y cerebro sin cicatrices.',
+      lifespan: '12 a 15 años'
+    },
+
+    // Vida Marina
+    {
+      id: 'pulpo-comun',
+      name: 'Pulpo Común',
+      scientific: 'Octopus vulgaris',
+      group: 'marino',
+      groupLabel: 'Molusco Invertebrado',
+      emoji: '🐙',
+      habitat: 'Arrecifes y fondos rocosos marinos',
+      diet: 'Carnívoro (cangrejos y moluscos)',
+      size: 'Hasta 1 metro de envergadura',
+      conservation: 'Preocupación Menor',
+      summary: 'El invertebrado más inteligente del planeta. Dos tercios de sus neuronas están distribuidas en sus 8 brazos, permitiéndoles pensar y resolver problemas de forma autónoma.',
+      superpower: 'Tres corazones, sangre azul a base de cobre y camuflaje volumétrico instantáneo de color y textura en 0.2 segundos.',
+      lifespan: '1 a 2 años'
+    },
+    {
+      id: 'tiburon-blanco',
+      name: 'Tiburón Blanco',
+      scientific: 'Carcharodon carcharias',
+      group: 'marino',
+      groupLabel: 'Pez Cartilaginoso',
+      emoji: '🦈',
+      habitat: 'Aguas costeras templadas y cálidas',
+      diet: 'Carnívoro ápice marino',
+      size: '4.5 - 6 metros | 2.000 kg',
+      conservation: 'Vulnerable (UICN)',
+      summary: 'Depredador marino legendario. Posee hasta 300 dientes serrados en varias hileras y un esqueleto compuesto enteramente de cartílago ligero y flexible.',
+      superpower: 'Ampollas de Lorenzini: órganos electrosensibles que detectan el latido del corazón de sus presas en el agua.',
+      lifespan: 'Hasta 70 años'
+    }
+  ];
+
+  // --------------------------------------------------------------------------
+  // 3. RENDERIZADO DE TARJETAS Y FILTRADO
+  // --------------------------------------------------------------------------
+  const animalsGrid = document.getElementById('animalsGrid');
+  const searchInput = document.getElementById('animalSearchInput');
+  const filterChips = document.querySelectorAll('.filter-chip');
+  let currentGroupFilter = 'todos';
+  let currentSearchQuery = '';
+
+  function renderAnimals() {
+    if (!animalsGrid) return;
+    animalsGrid.innerHTML = '';
+
+    const filtered = animalsDatabase.filter((animal) => {
+      const matchesGroup = currentGroupFilter === 'todos' || animal.group === currentGroupFilter;
+      const q = currentSearchQuery.toLowerCase().trim();
+      const matchesSearch =
+        q === '' ||
+        animal.name.toLowerCase().includes(q) ||
+        animal.scientific.toLowerCase().includes(q) ||
+        animal.groupLabel.toLowerCase().includes(q) ||
+        animal.habitat.toLowerCase().includes(q);
+
+      return matchesGroup && matchesSearch;
+    });
+
+    if (filtered.length === 0) {
+      animalsGrid.innerHTML = `
+        <div style="grid-column: 1 / -1; text-align: center; padding: 3rem 1rem; color: var(--text-muted);">
+          <div style="font-size: 3rem; margin-bottom: 0.5rem;">🔍🍃</div>
+          <h3>No se encontraron animales con ese criterio</h3>
+          <p>Prueba buscando con otro nombre como "León", "Mariposa", "Tiburón" o seleccionando otra categoría.</p>
+        </div>
+      `;
+      return;
+    }
+
+    filtered.forEach((animal) => {
+      const card = document.createElement('article');
+      card.className = 'animal-card';
+      card.innerHTML = `
+        <div>
+          <div class="card-top">
+            <span class="animal-avatar">${animal.emoji}</span>
+            <span class="group-badge ${animal.group}">${animal.groupLabel}</span>
+          </div>
+          <h3 class="animal-name">${animal.name}</h3>
+          <div class="animal-scientific">${animal.scientific}</div>
+          <div class="animal-props">
+            <span class="prop-pill">🌿 ${animal.habitat.split(' ')[0]}</span>
+            <span class="prop-pill">🥩 ${animal.diet.split(' ')[0]}</span>
+          </div>
+          <p class="animal-fact">${animal.summary}</p>
+        </div>
+        <button class="btn-card-detail" data-id="${animal.id}">
+          Ver Ficha Completa →
+        </button>
+      `;
+
+      const detailBtn = card.querySelector('.btn-card-detail');
+      detailBtn.addEventListener('click', () => {
+        openAnimalModal(animal);
+      });
+
+      animalsGrid.appendChild(card);
+    });
+  }
+
+  // Eventos de filtro
+  filterChips.forEach((chip) => {
+    chip.addEventListener('click', () => {
+      filterChips.forEach((c) => c.classList.remove('active'));
+      chip.classList.add('active');
+      currentGroupFilter = chip.dataset.filter;
+      playSoftClick();
+      renderAnimals();
+    });
+  });
+
+  // Evento de búsqueda
+  if (searchInput) {
+    searchInput.addEventListener('input', (e) => {
+      currentSearchQuery = e.target.value;
+      renderAnimals();
+    });
+  }
+
+  renderAnimals();
+
+  // --------------------------------------------------------------------------
+  // 4. MODAL DE FICHA ZOOLOGICA
+  // --------------------------------------------------------------------------
+  const modalOverlay = document.getElementById('animalModalOverlay');
+  const modalCloseBtn = document.getElementById('modalCloseBtn');
+  const modalAvatar = document.getElementById('modalAvatar');
+  const modalTitle = document.getElementById('modalTitle');
+  const modalScientific = document.getElementById('modalScientific');
+  const modalHabitat = document.getElementById('modalHabitat');
+  const modalDiet = document.getElementById('modalDiet');
+  const modalSize = document.getElementById('modalSize');
+  const modalConservation = document.getElementById('modalConservation');
+  const modalBio = document.getElementById('modalBio');
+  const modalSuperpower = document.getElementById('modalSuperpower');
+
+  function openAnimalModal(animal) {
+    if (!modalOverlay) return;
+
+    modalAvatar.textContent = animal.emoji;
+    modalTitle.textContent = animal.name;
+    modalScientific.textContent = `${animal.scientific} • ${animal.groupLabel}`;
+    modalHabitat.textContent = animal.habitat;
+    modalDiet.textContent = animal.diet;
+    modalSize.textContent = animal.size;
+    modalConservation.textContent = animal.conservation;
+    modalBio.textContent = animal.summary;
+    modalSuperpower.textContent = `⚡ Adaptación Asombrosa: ${animal.superpower} (Longevidad: ${animal.lifespan})`;
+
+    modalOverlay.classList.add('active');
+    playSoftClick();
+  }
+
+  function closeModal() {
+    if (modalOverlay) {
+      modalOverlay.classList.remove('active');
+    }
+  }
+
+  if (modalCloseBtn) {
+    modalCloseBtn.addEventListener('click', closeModal);
+  }
+
+  if (modalOverlay) {
+    modalOverlay.addEventListener('click', (e) => {
+      if (e.target === modalOverlay) {
+        closeModal();
+      }
+    });
+  }
+
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modalOverlay && modalOverlay.classList.contains('active')) {
+      closeModal();
+    }
+  });
+
+  // --------------------------------------------------------------------------
+  // 5. TRIVIA DEL REINO ANIMAL
+  // --------------------------------------------------------------------------
+  const quizData = [
+    {
+      question: '¿Cuál de los siguientes animales es un mamífero pero pone huevos en lugar de parir crías vivas?',
+      options: ['El Delfín Rosado', 'El Ornitorrinco', 'El Murciélago', 'El Canguro'],
+      correct: 1,
+      explanation: 'El ornitorrinco y los equidnas son los únicos mamíferos monotremas del planeta que ponen huevos, pero amamantan a sus crías recién nacidas con leche.'
+    },
+    {
+      question: '¿Cuántas patas tiene estrictamente cualquier insecto adulto en su anatomía?',
+      options: ['6 patas (3 pares)', '8 patas (4 pares)', '10 patas', 'Varía entre 6 y 14 según el clima'],
+      correct: 0,
+      explanation: 'Todos los insectos pertenecen a los hexápodos y poseen exactamente 6 patas articuladas divididas en tres segmentos torácicos. Las arañas tienen 8 y son arácnidos, no insectos.'
+    },
+    {
+      question: '¿Qué porcentaje aproximado de todas las especies animales conocidas en la Tierra son invertebrados?',
+      options: ['Aproximadamente el 20%', 'Alrededor del 50%', 'Más del 95%', 'Solo el 5%'],
+      correct: 2,
+      explanation: '¡Los invertebrados dominan la Tierra! Más del 95% de todas las especies descritas por la ciencia carecen de columna vertebral, siendo los artrópodos (insectos, arácnidos, crustáceos) los más abundantes.'
+    },
+    {
+      question: '¿Cuál es el único mamífero del reino animal dotado con la capacidad de vuelo verdadero y sustentado?',
+      options: ['La Ardilla Voladora', 'El Murciélago', 'El Lémur Volador', 'El Colibrí'],
+      correct: 1,
+      explanation: 'Las ardillas y lémures solo planean, mientras que los murciélagos poseen alas membranosas verdaderas con huesos homólogos a dedos humanos capaces de aletear y maniobrar en el aire.'
+    }
+  ];
+
+  let currentQuestionIndex = 0;
+  let quizScore = 0;
+
+  const quizQuestionText = document.getElementById('quizQuestionText');
+  const quizOptionsGrid = document.getElementById('quizOptionsGrid');
+  const quizFeedback = document.getElementById('quizFeedback');
+  const quizScoreEl = document.getElementById('quizScoreEl');
+  const quizNextBtn = document.getElementById('quizNextBtn');
+
+  function renderQuestion() {
+    const q = quizData[currentQuestionIndex];
+    if (!q) return;
+
+    if (quizQuestionText) quizQuestionText.textContent = `${currentQuestionIndex + 1}. ${q.question}`;
+    if (quizFeedback) {
+      quizFeedback.style.display = 'none';
+      quizFeedback.textContent = '';
+    }
+    if (quizNextBtn) quizNextBtn.style.display = 'none';
+
+    if (quizOptionsGrid) {
+      quizOptionsGrid.innerHTML = '';
+      q.options.forEach((opt, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'option-btn';
+        btn.textContent = opt;
+        btn.addEventListener('click', () => handleOptionSelect(idx, btn));
+        quizOptionsGrid.appendChild(btn);
+      });
+    }
+
+    if (quizScoreEl) {
+      quizScoreEl.textContent = `Puntaje: ${quizScore} / ${quizData.length}`;
+    }
+  }
+
+  function handleOptionSelect(selectedIndex, clickedBtn) {
+    const q = quizData[currentQuestionIndex];
+    const allBtns = quizOptionsGrid.querySelectorAll('.option-btn');
+    allBtns.forEach((b) => (b.disabled = true));
+
+    if (selectedIndex === q.correct) {
+      clickedBtn.classList.add('correct');
+      quizScore++;
+      playSuccessChime();
+      quizFeedback.innerHTML = `<strong>¡Exacto! 🌿🎉</strong> ${q.explanation}`;
+    } else {
+      clickedBtn.classList.add('incorrect');
+      allBtns[q.correct].classList.add('correct');
+      playSoftClick();
+      quizFeedback.innerHTML = `<strong>Incorrecto.</strong> ${q.explanation}`;
+    }
+
+    quizFeedback.style.display = 'block';
+    if (quizScoreEl) quizScoreEl.textContent = `Puntaje: ${quizScore} / ${quizData.length}`;
+
+    if (currentQuestionIndex < quizData.length - 1) {
+      if (quizNextBtn) {
+        quizNextBtn.style.display = 'inline-flex';
+        quizNextBtn.textContent = 'Siguiente Pregunta →';
+      }
+    } else {
+      if (quizNextBtn) {
+        quizNextBtn.style.display = 'inline-flex';
+        quizNextBtn.textContent = 'Ver Resultado Final 🏆';
+      }
+    }
+  }
+
+  if (quizNextBtn) {
+    quizNextBtn.addEventListener('click', () => {
+      if (currentQuestionIndex < quizData.length - 1) {
+        currentQuestionIndex++;
+        renderQuestion();
+      } else {
+        if (quizQuestionText) {
+          quizQuestionText.textContent = `¡Trivia Finalizada! Obtuviste ${quizScore} de ${quizData.length} aciertos.`;
+        }
+        if (quizOptionsGrid) quizOptionsGrid.innerHTML = '';
+        quizFeedback.style.display = 'block';
+        quizFeedback.innerHTML = `
+          <div style="text-align: center; padding: 1.5rem 0;">
+            <h3>${quizScore >= 3 ? '🐾 ¡Sos un Zoólogo Experto del Reino Animal!' : '🌱 ¡Buen trabajo! Ahora conoces mucho mejor la asombrosa diversidad de la fauna.'}</h3>
+            <p style="margin-top: 0.5rem; color: var(--text-muted);">Sigue explorando las fichas y asómbrate con las criaturas que comparten nuestro planeta.</p>
+          </div>
+        `;
+        quizNextBtn.style.display = 'none';
+        playSuccessChime();
+      }
+    });
+  }
+
+  renderQuestion();
+});
