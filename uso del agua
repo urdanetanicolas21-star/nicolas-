@@ -1,0 +1,2274 @@
+/**
+ * ============================================================================
+ * USO DEL AGUA - SCRIPT INTERACTIVO
+ * Web Audio sintetizado, calculadora de huella hídrica, simulador de fuga,
+ * trivia educativa y generador de certificado de compromiso.
+ * ============================================================================
+ */
+
+document.addEventListener('DOMContentLoaded', () => {
+  // --------------------------------------------------------------------------
+  // 1. SISTEMA DE AUDIO SINTETIZADO (Web Audio API)
+  // Sin archivos externos: sintetiza gotas de agua, sonido ambiental y fanfarria.
+  // --------------------------------------------------------------------------
+  let audioCtx = null;
+  let ambientSource = null;
+  let ambientGain = null;
+  let isAmbientPlaying = false;
+
+  function initAudio() {
+    if (!audioCtx) {
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      if (AudioContext) {
+        audioCtx = new AudioContext();
+      }
+    }
+    if (audioCtx && audioCtx.state === 'suspended') {
+      audioCtx.resume();
+    }
+  }
+
+  // Sonido de gota de agua sintetizado ("bloop")
+  function playWaterDropSound() {
+    initAudio();
+    if (!audioCtx) return;
+
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+
+    osc.type = 'sine';
+    const now = audioCtx.currentTime;
+
+    // Frecuencia que cae rápidamente para el clásico "plop" acuático
+    osc.frequency.setValueAtTime(800, now);
+    osc.frequency.exponentialRampToValueAtTime(320, now + 0.12);
+
+    gain.gain.setValueAtTime(0.35, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+
+    osc.start(now);
+    osc.stop(now + 0.12);
+  }
+
+  // Sonido de fanfarria / logro
+  function playSuccessChime() {
+    initAudio();
+    if (!audioCtx) return;
+
+    const notes = [329.63, 392.00, 523.25, 659.25]; // E4, G4, C5, E5
+    notes.forEach((freq, idx) => {
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      const startTime = audioCtx.currentTime + idx * 0.08;
+
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(freq, startTime);
+
+      gain.gain.setValueAtTime(0.2, startTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, startTime + 0.35);
+
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+
+      osc.start(startTime);
+      osc.stop(startTime + 0.35);
+    });
+  }
+
+  // Sonido relajante continuo de arroyo/agua corriente
+  function toggleAmbientSound() {
+    initAudio();
+    if (!audioCtx) return;
+
+    const btn = document.getElementById('ambientAudioBtn');
+
+    if (isAmbientPlaying) {
+      if (ambientGain) {
+        ambientGain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.5);
+        setTimeout(() => {
+          if (ambientSource) ambientSource.stop();
+          isAmbientPlaying = false;
+          if (btn) {
+            btn.classList.remove('playing');
+            btn.innerHTML = '<span>🔊</span> Sonido Relajante';
+          }
+        }, 500);
+      }
+    } else {
+      // Crear ruido blanco filtrado como agua corriente suave
+      const bufferSize = audioCtx.sampleRate * 2;
+      const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+      const data = buffer.getChannelData(0);
+      for (let i = 0; i < bufferSize; i++) {
+        data[i] = (Math.random() * 2 - 1) * 0.15;
+      }
+
+      ambientSource = audioCtx.createBufferSource();
+      ambientSource.buffer = buffer;
+      ambientSource.loop = true;
+
+      const filter = audioCtx.createBiquadFilter();
+      filter.type = 'lowpass';
+      filter.frequency.setValueAtTime(650, audioCtx.currentTime);
+
+      ambientGain = audioCtx.createGain();
+      ambientGain.gain.setValueAtTime(0.001, audioCtx.currentTime);
+      ambientGain.gain.exponentialRampToValueAtTime(0.18, audioCtx.currentTime + 0.5);
+
+      ambientSource.connect(filter);
+      filter.connect(ambientGain);
+      ambientGain.connect(audioCtx.destination);
+
+      ambientSource.start();
+      isAmbientPlaying = true;
+
+      if (btn) {
+        btn.classList.add('playing');
+        btn.innerHTML = '<span>💧</span> Sonido Activo';
+      }
+    }
+  }
+
+  const ambientBtn = document.getElementById('ambientAudioBtn');
+  if (ambientBtn) {
+    ambientBtn.addEventListener('click', toggleAmbientSound);
+  }
+
+  // --------------------------------------------------------------------------
+  // 2. CALCULADORA DE HUELLA HÍDRICA DIARIA
+  // --------------------------------------------------------------------------
+  const showerRange = document.getElementById('showerRange');
+  const teethRange = document.getElementById('teethRange');
+  const dishesRange = document.getElementById('dishesRange');
+  const laundryRange = document.getElementById('laundryRange');
+  const gardenRange = document.getElementById('gardenRange');
+
+  const showerVal = document.getElementById('showerVal');
+  const teethVal = document.getElementById('teethVal');
+  const dishesVal = document.getElementById('dishesVal');
+  const laundryVal = document.getElementById('laundryVal');
+  const gardenVal = document.getElementById('gardenVal');
+
+  const footprintLitersEl = document.getElementById('footprintLiters');
+  const footprintProgressFill = document.getElementById('footprintProgressFill');
+  const footprintVerdictEl = document.getElementById('footprintVerdict');
+
+  function updateFootprint() {
+    const showerMin = parseInt(showerRange.value, 10);
+    const teethMin = parseInt(teethRange.value, 10);
+    const dishesMin = parseInt(dishesRange.value, 10);
+    const laundryPerWeek = parseInt(laundryRange.value, 10);
+    const gardenMin = parseInt(gardenRange.value, 10);
+
+    // Actualizar etiquetas visuales
+    showerVal.textContent = `${showerMin} min`;
+    teethVal.textContent = `${teethMin} min`;
+    dishesVal.textContent = `${dishesMin} min`;
+    laundryVal.textContent = `${laundryPerWeek} por sem.`;
+    gardenVal.textContent = `${gardenMin} min`;
+
+    // Tasas estándar de consumo (L/min):
+    // Ducha: ~12 L/min
+    // Grifo abierto para dientes/lavabo: ~6 L/min
+    // Lavado de platos con chorro abierto: ~9 L/min
+    // Lavadora por carga (~65 L divididos entre 7 días): ~9.3 L/día por ciclo semanal
+    // Manguera de jardín: ~15 L/min
+    const dailyShower = showerMin * 12;
+    const dailyTeeth = teethMin * 6;
+    const dailyDishes = dishesMin * 9;
+    const dailyLaundry = (laundryPerWeek * 65) / 7;
+    const dailyGarden = gardenMin * 15;
+
+    // Consumo basal para hidratación y cocción: ~15 L
+    const baseConsumption = 15;
+
+    const totalLiters = Math.round(dailyShower + dailyTeeth + dailyDishes + dailyLaundry + dailyGarden + baseConsumption);
+
+    if (footprintLitersEl) {
+      footprintLitersEl.textContent = totalLiters;
+    }
+
+    // Porcentaje visual basado en 350 Litros máx.
+    const percentage = Math.min(Math.max((totalLiters / 350) * 100, 8), 100);
+    if (footprintProgressFill) {
+      footprintProgressFill.style.width = `${percentage}%`;
+
+      if (totalLiters <= 120) {
+        footprintProgressFill.style.background = 'linear-gradient(90deg, #10b981, #34d399)';
+        footprintVerdictEl.innerHTML = `
+          <strong>🌿 ¡Excelente consumo responsable!</strong><br>
+          Estás dentro del rango recomendado por la OMS (~100L diarios). Tus hábitos cuidan activamente las reservas de agua para el futuro.
+        `;
+      } else if (totalLiters <= 220) {
+        footprintProgressFill.style.background = 'linear-gradient(90deg, #f59e0b, #fbbf24)';
+        footprintVerdictEl.innerHTML = `
+          <strong>💧 Consumo Moderado con Oportunidad de Ahorro:</strong><br>
+          Consumes ${totalLiters} L/día. Si reduces tu ducha a 5 minutos y cierras la llave al cepillarte, puedes ahorrar hasta <strong>${Math.round(totalLiters * 0.35)} litros diarios</strong>.
+        `;
+      } else {
+        footprintProgressFill.style.background = 'linear-gradient(90deg, #f43f5e, #fb7185)';
+        footprintVerdictEl.innerHTML = `
+          <strong>⚠️ Alerta de Alto Consumo (${totalLiters} L/día):</strong><br>
+          Estás consumiendo más del doble de lo necesario. El uso de manguera continua y duchas prolongadas son los mayores puntos de fuga. ¡Cambiando a balde o tobo ahorrarías más del 50%!
+        `;
+      }
+    }
+  }
+
+  [showerRange, teethRange, dishesRange, laundryRange, gardenRange].forEach((slider) => {
+    if (slider) {
+      slider.addEventListener('input', () => {
+        updateFootprint();
+      });
+    }
+  });
+
+  updateFootprint();
+
+  // --------------------------------------------------------------------------
+  // 3. SIMULADOR DEL GRIFO QUE GOTEA
+  // --------------------------------------------------------------------------
+  const dripRateSelect = document.getElementById('dripRateSelect');
+  const leakPerHourEl = document.getElementById('leakPerHour');
+  const leakPerMonthEl = document.getElementById('leakPerMonth');
+  const waterDropAnim = document.getElementById('waterDropAnim');
+  const btnFixTap = document.getElementById('btnFixTap');
+  const tapStatusText = document.getElementById('tapStatusText');
+  let isLeakFixed = false;
+
+  const dripRates = {
+    slow: { lPerHour: 0.8, lPerMonth: 580, animDuration: '2.5s' },
+    medium: { lPerHour: 1.8, lPerMonth: 1300, animDuration: '1.4s' },
+    fast: { lPerHour: 4.2, lPerMonth: 3020, animDuration: '0.7s' },
+    stream: { lPerHour: 12.0, lPerMonth: 8640, animDuration: '0.3s' }
+  };
+
+  function updateLeak() {
+    if (isLeakFixed) return;
+    const rate = dripRates[dripRateSelect.value] || dripRates.medium;
+    leakPerHourEl.textContent = `${rate.lPerHour.toFixed(1)} L`;
+    leakPerMonthEl.textContent = `${rate.lPerMonth.toLocaleString()} L`;
+
+    if (waterDropAnim) {
+      waterDropAnim.style.animationDuration = rate.animDuration;
+      waterDropAnim.style.display = 'block';
+    }
+  }
+
+  if (dripRateSelect) {
+    dripRateSelect.addEventListener('change', () => {
+      isLeakFixed = false;
+      if (tapStatusText) tapStatusText.textContent = 'Goteo activo en curso...';
+      updateLeak();
+    });
+  }
+
+  if (btnFixTap) {
+    btnFixTap.addEventListener('click', () => {
+      isLeakFixed = true;
+      if (waterDropAnim) {
+        waterDropAnim.style.display = 'none';
+      }
+      leakPerHourEl.textContent = '0.0 L';
+      leakPerMonthEl.textContent = '0 L';
+      if (tapStatusText) {
+        tapStatusText.innerHTML = '✨ <strong>¡Grifo ajustado y sellado!</strong> Cero desperdicio.';
+      }
+      playWaterDropSound();
+      playSuccessChime();
+    });
+  }
+
+  updateLeak();
+
+  // --------------------------------------------------------------------------
+  // 4. PESTAÑAS DE GUÍA PRÁCTICA
+  // --------------------------------------------------------------------------
+  const tabBtns = document.querySelectorAll('.guide-tab-btn');
+  const tabPanels = document.querySelectorAll('.guide-tab-content');
+
+  tabBtns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const target = btn.dataset.tab;
+      tabBtns.forEach((b) => b.classList.remove('active'));
+      tabPanels.forEach((p) => p.classList.remove('active'));
+
+      btn.classList.add('active');
+      const activePanel = document.getElementById(`tab-${target}`);
+      if (activePanel) {
+        activePanel.classList.add('active');
+      }
+      playWaterDropSound();
+    });
+  });
+
+  // --------------------------------------------------------------------------
+  // 5. TRIVIA INTERACTIVA: ¿CUÁNTO SABES DEL AGUA?
+  // --------------------------------------------------------------------------
+  const quizData = [
+    {
+      question: '¿Qué porcentaje del agua total del planeta es agua dulce accesible para consumo humano?',
+      options: ['Aproximadamente el 20%', 'Menos del 1%', 'Casi el 10%', 'El 50%'],
+      correct: 1,
+      explanation: 'Aunque el 71% del planeta es agua, el 97.5% es salada. Del 2.5% de agua dulce restante, la inmensa mayoría está congelada en glaciares o bajo tierra profunda, dejando menos del 1% accesible en ríos y lagos.'
+    },
+    {
+      question: '¿Cuántos litros de agua virtual se necesitan para fabricar una sola camiseta de algodón?',
+      options: ['Unos 100 litros', 'Alrededor de 2.700 litros', '500 litros', '50 litros'],
+      correct: 1,
+      explanation: 'El cultivo y procesamiento del algodón es altamente intensivo en agua: fabricar una camiseta requiere aproximadamente 2.700 litros, lo que bebe una persona en casi 3 años.'
+    },
+    {
+      question: '¿Cuál es el tiempo máximo de ducha recomendado por la OMS para un uso sostenible?',
+      options: ['5 minutos', '15 minutos', '25 minutos', 'No hay límite'],
+      correct: 0,
+      explanation: 'La OMS recomienda duchas de máximo 5 minutos, lo que gasta unos 60 litros en lugar de los 150 a 200 litros de un baño prolongado.'
+    },
+    {
+      question: '¿Qué hábito genera el mayor ahorro de agua potable en la limpieza exterior?',
+      options: ['Usar manguera a presión continua', 'Barrer en seco y usar un tobo/balde de agua', 'Limpiar todos los días con agua corriente', 'Dejar correr el agua por la pendiente'],
+      correct: 1,
+      explanation: 'Barrer primero la suciedad en seco y usar un balde en vez de manguera ahorra hasta un 85% de agua en patios, aceras y lavado de vehículos.'
+    }
+  ];
+
+  let currentQuestionIndex = 0;
+  let quizScore = 0;
+
+  const quizQuestionText = document.getElementById('quizQuestionText');
+  const quizOptionsGrid = document.getElementById('quizOptionsGrid');
+  const quizFeedback = document.getElementById('quizFeedback');
+  const quizScoreEl = document.getElementById('quizScoreEl');
+  const quizNextBtn = document.getElementById('quizNextBtn');
+
+  function renderQuestion() {
+    const q = quizData[currentQuestionIndex];
+    if (!q) return;
+
+    if (quizQuestionText) quizQuestionText.textContent = `${currentQuestionIndex + 1}. ${q.question}`;
+    if (quizFeedback) {
+      quizFeedback.style.display = 'none';
+      quizFeedback.textContent = '';
+    }
+    if (quizNextBtn) quizNextBtn.style.display = 'none';
+
+    if (quizOptionsGrid) {
+      quizOptionsGrid.innerHTML = '';
+      q.options.forEach((opt, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'option-btn';
+        btn.textContent = opt;
+        btn.addEventListener('click', () => handleOptionSelect(idx, btn));
+        quizOptionsGrid.appendChild(btn);
+      });
+    }
+
+    if (quizScoreEl) {
+      quizScoreEl.textContent = `Puntaje: ${quizScore} / ${quizData.length}`;
+    }
+  }
+
+  function handleOptionSelect(selectedIndex, clickedBtn) {
+    const q = quizData[currentQuestionIndex];
+    const allBtns = quizOptionsGrid.querySelectorAll('.option-btn');
+    allBtns.forEach((b) => (b.disabled = true));
+
+    if (selectedIndex === q.correct) {
+      clickedBtn.classList.add('correct');
+      quizScore++;
+      playSuccessChime();
+      quizFeedback.innerHTML = `<strong>¡Correcto! 🎉</strong> ${q.explanation}`;
+    } else {
+      clickedBtn.classList.add('incorrect');
+      allBtns[q.correct].classList.add('correct');
+      playWaterDropSound();
+      quizFeedback.innerHTML = `<strong>Respuesta incorrecta.</strong> ${q.explanation}`;
+    }
+
+    quizFeedback.style.display = 'block';
+    if (quizScoreEl) quizScoreEl.textContent = `Puntaje: ${quizScore} / ${quizData.length}`;
+
+    if (currentQuestionIndex < quizData.length - 1) {
+      if (quizNextBtn) {
+        quizNextBtn.style.display = 'inline-flex';
+        quizNextBtn.textContent = 'Siguiente Pregunta →';
+      }
+    } else {
+      if (quizNextBtn) {
+        quizNextBtn.style.display = 'inline-flex';
+        quizNextBtn.textContent = 'Ver Resultado Final 🏆';
+      }
+    }
+  }
+
+  if (quizNextBtn) {
+    quizNextBtn.addEventListener('click', () => {
+      if (currentQuestionIndex < quizData.length - 1) {
+        currentQuestionIndex++;
+        renderQuestion();
+      } else {
+        // Fin de la trivia
+        if (quizQuestionText) {
+          quizQuestionText.textContent = `¡Trivia Completada! Has obtenido ${quizScore} de ${quizData.length} puntos.`;
+        }
+        if (quizOptionsGrid) quizOptionsGrid.innerHTML = '';
+        quizFeedback.style.display = 'block';
+        quizFeedback.innerHTML = `
+          <div style="text-align: center; padding: 1rem 0;">
+            <h3>${quizScore >= 3 ? '🌊 ¡Sos un Guardián Experto del Agua!' : '🌱 ¡Buen intento! Ahora ya conoces cómo proteger este recurso vital.'}</h3>
+            <p>Comparte estos datos con tu familia y amigos para que cada gota cuente.</p>
+          </div>
+        `;
+        quizNextBtn.style.display = 'none';
+        playSuccessChime();
+      }
+    });
+  }
+
+  renderQuestion();
+
+  // --------------------------------------------------------------------------
+  // 6. PACTO CIUDADANO POR EL AGUA (GENERADOR DE CERTIFICADO)
+  // --------------------------------------------------------------------------
+  const pledgeForm = document.getElementById('pledgeForm');
+  const certOutput = document.getElementById('certificateOutput');
+  const certHolderName = document.getElementById('certHolderName');
+  const certDate = document.getElementById('certDate');
+
+  if (pledgeForm) {
+    pledgeForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const nameInput = document.getElementById('pledgeNameInput');
+      const name = nameInput.value.trim();
+
+      if (!name) return;
+
+      const checkedItems = pledgeForm.querySelectorAll('input[type="checkbox"]:checked');
+      if (checkedItems.length < 2) {
+        alert('Por favor selecciona al menos dos compromisos para firmar tu pacto por el agua.');
+        return;
+      }
+
+      if (certHolderName) certHolderName.textContent = name;
+      if (certDate) {
+        const today = new Date();
+        certDate.textContent = today.toLocaleDateString('es-ES', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
+        });
+      }
+
+      if (certOutput) {
+        certOutput.style.display = 'block';
+        certOutput.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+
+      playSuccessChime();
+    });
+  }
+});
+
+
+
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>El Uso Responsable del Agua | Aprende, Calcula tu Huella y Conserva</title>
+
+  <!-- Metadatos SEO -->
+  <meta name="description" content="Una plataforma interactiva e inmersiva sobre el cuidado y uso responsable del agua: calculadora de huella hídrica, simulador de fugas, guía de ahorro y trivia ecológica.">
+  <meta name="keywords" content="Cuidado del agua, uso responsable del agua, huella hídrica, conservación ambiental, ahorro de agua en el hogar, agua virtual, cosecha de lluvia">
+  <meta name="author" content="Antigravity Web Studio">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="El Uso del Agua: Cada Gota Cuenta">
+  <meta property="og:description" content="Calcula tu huella hídrica diaria, descubre el agua invisible en tus productos y firma tu compromiso por el planeta.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="assets/uso_agua_hero.jpg">
+
+  <!-- Favicon SVG -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💧</text></svg>">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Hoja de estilos -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Fondo Ambiental de Partículas -->
+  <div class="ambient-water-bg" aria-hidden="true"></div>
+
+  <!-- BARRA SUPERIOR DE CONCIENTIZACIÓN -->
+  <aside class="top-notice-bar" aria-label="Alerta Global del Agua">
+    <div class="notice-badge">
+      <span class="droplet-pulse">💧</span>
+      <span>Menos del 1% del agua del planeta está disponible para consumo humano</span>
+    </div>
+
+    <div class="top-bar-actions">
+      <!-- Botón de Sonido Relajante Acuático -->
+      <button class="btn-ambient-sound" id="ambientAudioBtn" title="Activar sonido relajante de corriente de agua" aria-label="Sonido ambiental">
+        <span>🔊</span> Sonido Relajante
+      </button>
+    </div>
+  </aside>
+
+  <!-- HEADER Y NAVEGACIÓN -->
+  <header class="main-header">
+    <a href="#inicio" class="brand-wrap" aria-label="Ir al inicio">
+      <div class="brand-icon-box">
+        <span>🌊</span>
+      </div>
+      <div class="brand-text">
+        <h1>AGUA VITAL</h1>
+        <span>CUIDADO & CONSERVACIÓN</span>
+      </div>
+    </a>
+
+    <nav class="main-nav" aria-label="Navegación del sitio">
+      <ul>
+        <li><a href="#calculadora">Calculadora</a></li>
+        <li><a href="#fugas">Simulador de Fugas</a></li>
+        <li><a href="#invisible">Agua Oculta</a></li>
+        <li><a href="#guia">Guía Práctica</a></li>
+        <li><a href="#trivia">Trivia</a></li>
+        <li><a href="#pacto">Pacto por el Agua</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <!-- HERO SECTION -->
+    <section class="hero" id="inicio">
+      <div class="hero-content">
+        <div class="hero-tag">
+          <span>🌱</span> Conciencia Ambiental & Sostenibilidad
+        </div>
+        <h2 class="hero-title">
+          Cada gota cuenta: El valor vital del <span class="highlight-aqua">Agua Dulce</span>
+        </h2>
+        <p class="hero-desc">
+          El agua es el recurso más indispensable para la vida en la Tierra. Aunque nuestro planeta parece un inmenso océano azul, el agua dulce accesible es extremadamente escasa. Descubre el impacto real de tus acciones cotidianas y aprende a protegerla.
+        </p>
+
+        <!-- Métricas Clave Globales -->
+        <div class="hero-stats-grid">
+          <div class="stat-card">
+            <div class="stat-num">2.5%</div>
+            <div class="stat-label">Agua dulce global</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num">100 L</div>
+            <div class="stat-label">Límite óptimo OMS/día</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num">2.200M</div>
+            <div class="stat-label">Sin acceso seguro</div>
+          </div>
+        </div>
+
+        <div class="hero-actions">
+          <a href="#calculadora" class="btn btn-primary" id="btnHeroCalculadora">
+            <span>📊</span> Calcular Mi Huella Hídrica
+          </a>
+          <a href="#guia" class="btn btn-secondary" id="btnHeroGuia">
+            <span>💡</span> Guía de Buenas Prácticas
+          </a>
+        </div>
+      </div>
+
+      <!-- Tarjeta Visual con la Fotografía de la Gota y Ecosistema -->
+      <div class="hero-media-wrapper">
+        <div class="hero-image-card">
+          <img src="assets/uso_agua_hero.jpg" alt="Gota cristalina de agua suspendida sobre ondas serenas reflejando un bosque vivo y la naturaleza en su interior" loading="eager">
+          <div class="hero-image-overlay">
+            <span class="overlay-badge">Ecosistemas Acuáticos</span>
+            <p class="overlay-caption">"El agua pura sostiene a cada bosque, criatura y comunidad en nuestro planeta."</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CALCULADORA DE HUELLA HÍDRICA -->
+    <section class="section" id="calculadora">
+      <div class="section-header">
+        <span class="section-tag">Medición Personal</span>
+        <h2 class="section-title">Calculadora de Huella Hídrica Diaria</h2>
+        <p class="section-desc">
+          Ajusta los controles deslizantes según tus hábitos habituales para estimar cuántos litros de agua potable consumes al día de forma directa.
+        </p>
+      </div>
+
+      <div class="calc-card">
+        <div class="calc-sliders">
+          <!-- Slider 1: Ducha -->
+          <div class="slider-group">
+            <div class="slider-header">
+              <span class="slider-label">🚿 Tiempo de Ducha Diaria</span>
+              <span class="slider-val-badge" id="showerVal">10 min</span>
+            </div>
+            <input type="range" id="showerRange" min="2" max="25" value="10" step="1">
+          </div>
+
+          <!-- Slider 2: Grifo de Dientes y Lavabo -->
+          <div class="slider-group">
+            <div class="slider-header">
+              <span class="slider-label">🪥 Grifo abierto al cepillarte y lavarte</span>
+              <span class="slider-val-badge" id="teethVal">3 min</span>
+            </div>
+            <input type="range" id="teethRange" min="0" max="8" value="3" step="1">
+          </div>
+
+          <!-- Slider 3: Lavado de Platos -->
+          <div class="slider-group">
+            <div class="slider-header">
+              <span class="slider-label">🍽️ Lavado de vajilla con agua corriente</span>
+              <span class="slider-val-badge" id="dishesVal">12 min</span>
+            </div>
+            <input type="range" id="dishesRange" min="3" max="30" value="12" step="1">
+          </div>
+
+          <!-- Slider 4: Lavadora -->
+          <div class="slider-group">
+            <div class="slider-header">
+              <span class="slider-label">🧺 Ciclos de Lavadora por Semana</span>
+              <span class="slider-val-badge" id="laundryVal">3 por sem.</span>
+            </div>
+            <input type="range" id="laundryRange" min="1" max="10" value="3" step="1">
+          </div>
+
+          <!-- Slider 5: Riego de Jardín / Patio con Manguera -->
+          <div class="slider-group">
+            <div class="slider-header">
+              <span class="slider-label">🌿 Uso de Manguera en Jardín / Patio</span>
+              <span class="slider-val-badge" id="gardenVal">5 min</span>
+            </div>
+            <input type="range" id="gardenRange" min="0" max="20" value="5" step="1">
+          </div>
+        </div>
+
+        <!-- Panel de Resultados de la Huella -->
+        <div class="footprint-result-box">
+          <div>
+            <span class="footprint-title">Consumo Directo Estimado</span>
+            <div class="footprint-main-metric">
+              <div class="metric-number" id="footprintLiters">195</div>
+              <div class="metric-unit">Litros por Persona / Día</div>
+            </div>
+
+            <div class="progress-container">
+              <div class="progress-bar-fill" id="footprintProgressFill"></div>
+            </div>
+
+            <div class="target-reference">
+              <span>0 L</span>
+              <span>100 L (Meta OMS)</span>
+              <span>350+ L</span>
+            </div>
+          </div>
+
+          <div class="footprint-verdict" id="footprintVerdict">
+            <strong>💧 Consumo Moderado:</strong> Tienes margen para optimizar tu rutina y ahorrar hasta un 40% simplemente cerrando la llave mientras te cepillas o enjabonas.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SIMULADOR DEL GRIFO QUE GOTEA -->
+    <section class="section" id="fugas">
+      <div class="section-header">
+        <span class="section-tag">Las Fugas Invisibles</span>
+        <h2 class="section-title">El Costo Silencioso de una Fuga</h2>
+        <p class="section-desc">
+          Una gota por segundo parece insignificante, pero en 30 días representa el agua que una familia entera necesita para hidratarse durante meses.
+        </p>
+      </div>
+
+      <div class="tap-sim-card">
+        <!-- Escenario Visual del Grifo -->
+        <div class="tap-visual-stage">
+          <div class="tap-spout">🚰</div>
+          <div class="water-drop" id="waterDropAnim"></div>
+          <div class="tap-basin">
+            <div class="ripple-circle"></div>
+          </div>
+        </div>
+
+        <!-- Controles y Métricas de Desperdicio -->
+        <div class="tap-controls-box">
+          <h3>Simulador de Goteo y Desperdicio</h3>
+          <p id="tapStatusText">Elige la velocidad del goteo para ver el volumen de agua desperdiciado acumulado:</p>
+
+          <div class="form-group" style="margin-bottom: 1.5rem;">
+            <label for="dripRateSelect" style="display:block; margin-bottom: 0.5rem; font-weight: 600;">Velocidad del Goteo:</label>
+            <select id="dripRateSelect" class="form-control" style="width: 100%; padding: 0.75rem 1rem; border-radius: 10px; background: rgba(3, 11, 21, 0.8); border: 1px solid var(--border-glass); color: #fff;">
+              <option value="slow">Goteo Lento (1 gota cada 2 seg)</option>
+              <option value="medium" selected>Goteo Constante (1 gota por segundo)</option>
+              <option value="fast">Fuga Rápida (2 gotas por segundo)</option>
+              <option value="stream">Chorro Fino Continuo (Válvula averiada)</option>
+            </select>
+          </div>
+
+          <div class="leak-metrics-grid">
+            <div class="leak-stat-box">
+              <div class="leak-stat-val" id="leakPerHour">1.8 L</div>
+              <div class="leak-stat-lbl">Perdidos cada hora</div>
+            </div>
+            <div class="leak-stat-box">
+              <div class="leak-stat-val" id="leakPerMonth">1,300 L</div>
+              <div class="leak-stat-lbl">Perdidos al mes</div>
+            </div>
+          </div>
+
+          <button class="btn btn-fix-tap" id="btnFixTap">
+            <span>🔧</span> ¡Reparar la Fuga y Cerrar el Grifo!
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- AGUA OCULTA / HUELLA HÍDRICA VIRTUAL -->
+    <section class="section" id="invisible">
+      <div class="section-header">
+        <span class="section-tag">El Agua Invisible</span>
+        <h2 class="section-title">Huella Hídrica Oculta en tus Productos</h2>
+        <p class="section-desc">
+          Más del 90% del agua que consumimos no sale de la canilla: está incorporada en los alimentos que comemos, la ropa que vestimos y la tecnología que usamos.
+        </p>
+      </div>
+
+      <div class="virtual-water-grid">
+        <article class="virtual-card">
+          <div>
+            <span class="virtual-icon">☕</span>
+            <h3 class="virtual-title">1 Taza de Café</h3>
+            <div class="virtual-liters">140 <span>Litros</span></div>
+          </div>
+          <p class="virtual-desc">
+            Se requiere cultivar, regar, cosechar, tostar y transportar los granos antes de que el café llegue a tu mesa.
+          </p>
+        </article>
+
+        <article class="virtual-card">
+          <div>
+            <span class="virtual-icon">👕</span>
+            <h3 class="virtual-title">1 Camiseta de Algodón</h3>
+            <div class="virtual-liters">2.700 <span>Litros</span></div>
+          </div>
+          <p class="virtual-desc">
+            Equivalente al agua que una persona consume para beber durante casi 3 años. El algodón es un cultivo de riego muy exigente.
+          </p>
+        </article>
+
+        <article class="virtual-card">
+          <div>
+            <span class="virtual-icon">📱</span>
+            <h3 class="virtual-title">1 Teléfono Smartphone</h3>
+            <div class="virtual-liters">12.000 <span>Litros</span></div>
+          </div>
+          <p class="virtual-desc">
+            La minería de metales preciosos (oro, litio, cobalto) y la fabricación de microchips exigen agua desionizada ultra pura en cantidades masivas.
+          </p>
+        </article>
+
+        <article class="virtual-card">
+          <div>
+            <span class="virtual-icon">🍫</span>
+            <h3 class="virtual-title">1 Barra de Chocolate (100g)</h3>
+            <div class="virtual-liters">1.700 <span>Litros</span></div>
+          </div>
+          <p class="virtual-desc">
+            Los árboles de cacao requieren riego constante y varios procesos de fermentación y refinado para obtener manteca de cacao.
+          </p>
+        </article>
+
+        <article class="virtual-card">
+          <div>
+            <span class="virtual-icon">🍔</span>
+            <h3 class="virtual-title">1 Hamburguesa de Carne</h3>
+            <div class="virtual-liters">2.400 <span>Litros</span></div>
+          </div>
+          <p class="virtual-desc">
+            La gran mayoría del agua se destina a producir el forraje y granos con los que se alimenta al ganado a lo largo de su crianza.
+          </p>
+        </article>
+
+        <article class="virtual-card">
+          <div>
+            <span class="virtual-icon">📄</span>
+            <h3 class="virtual-title">500 Hojas de Papel A4</h3>
+            <div class="virtual-liters">5.000 <span>Litros</span></div>
+          </div>
+          <p class="virtual-desc">
+            Cada hoja de papel nuevo necesita unos 10 litros para la disolución de fibras de celulosa y su posterior blanqueamiento.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <!-- GUÍA PRÁCTICA Y COSECHA DE LLUVIA -->
+    <section class="section" id="guia">
+      <div class="section-header">
+        <span class="section-tag">Acciones Cotidianas</span>
+        <h2 class="section-title">Guía Práctica para el Uso Eficiente</h2>
+        <p class="section-desc">
+          Medidas de alto impacto que puedes implementar hoy mismo en tu hogar, escuela o trabajo sin comprometer tu comodidad.
+        </p>
+      </div>
+
+      <!-- Selector de Pestañas -->
+      <div class="guide-tabs">
+        <button class="guide-tab-btn active" data-tab="bano">En el Baño</button>
+        <button class="guide-tab-btn" data-tab="cocina">En la Cocina</button>
+        <button class="guide-tab-btn" data-tab="jardin">En el Jardín y Patios</button>
+        <button class="guide-tab-btn" data-tab="lluvia">Cosecha de Lluvia</button>
+      </div>
+
+      <!-- Contenido Tab 1: Baño -->
+      <div class="guide-tab-content active" id="tab-bano">
+        <div class="guide-card-list">
+          <div class="guide-item">
+            <div class="guide-item-icon">⏱️</div>
+            <div>
+              <h4>Duchas de 5 minutos</h4>
+              <p>Coloca una alarma o escucha una canción favorita de 4 a 5 minutos para controlar el tiempo bajo el agua.</p>
+              <span class="savings-chip">Ahorro: hasta 100L por ducha</span>
+            </div>
+          </div>
+
+          <div class="guide-item">
+            <div class="guide-item-icon">🪥</div>
+            <div>
+              <h4>Usa un vaso para el cepillado</h4>
+              <p>Evita dejar correr el grifo mientras te cepillas o enjabonas las manos. Solo necesitas medio vaso con agua.</p>
+              <span class="savings-chip">Ahorro: 15L por cepillado</span>
+            </div>
+          </div>
+
+          <div class="guide-item">
+            <div class="guide-item-icon">🚽</div>
+            <div>
+              <h4>Inodoros de doble descarga o botella en tanque</h4>
+              <p>Si tu inodoro es antiguo, coloca una botella de 1.5L con agua en la cisterna para reducir el volumen de cada descarga.</p>
+              <span class="savings-chip">Ahorro: 3L a 6L por vaciado</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="guide-visual">
+          <img src="assets/agua_sostenible.jpg" alt="Vivienda ecológica moderna con sistemas de ahorro y captación de agua" loading="lazy">
+        </div>
+      </div>
+
+      <!-- Contenido Tab 2: Cocina -->
+      <div class="guide-tab-content" id="tab-cocina">
+        <div class="guide-card-list">
+          <div class="guide-item">
+            <div class="guide-item-icon">🥣</div>
+            <div>
+              <h4>Lava frutas y verduras en un recipiente</h4>
+              <p>En lugar de dejar correr el agua del grifo, sumerge los alimentos en un bol con agua. Luego usa esa agua para regar plantas.</p>
+              <span class="savings-chip">Ahorro: 10L por lavado</span>
+            </div>
+          </div>
+
+          <div class="guide-item">
+            <div class="guide-item-icon">🧼</div>
+            <div>
+              <h4>Enjabona toda la vajilla en grupo</h4>
+              <p>Enjabona platos y cubiertos primero con la llave cerrada y luego enjuágalos todos juntos de manera continua y rápida.</p>
+              <span class="savings-chip">Ahorro: hasta 50L diarios</span>
+            </div>
+          </div>
+
+          <div class="guide-item">
+            <div class="guide-item-icon">🚰</div>
+            <div>
+              <h4>Instala aireadores o reductores en los grifos</h4>
+              <p>Son boquillas económicas que mezclan aire con agua, manteniendo la misma presión pero reduciendo el caudal a la mitad.</p>
+              <span class="savings-chip">Ahorro: 50% de agua en cocina</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="guide-visual">
+          <img src="assets/agua_sostenible.jpg" alt="Vivienda ecológica moderna con sistemas de ahorro y captación de agua" loading="lazy">
+        </div>
+      </div>
+
+      <!-- Contenido Tab 3: Jardín -->
+      <div class="guide-tab-content" id="tab-jardin">
+        <div class="guide-card-list">
+          <div class="guide-item">
+            <div class="guide-item-icon">🌅</div>
+            <div>
+              <h4>Riega temprano por la mañana o al anochecer</h4>
+              <p>Al regar en horas de poco sol evitas que el agua se evapore antes de penetrar en las raíces de las plantas.</p>
+              <span class="savings-chip">Ahorro: 30% de evaporación evitada</span>
+            </div>
+          </div>
+
+          <div class="guide-item">
+            <div class="guide-item-icon">🧹</div>
+            <div>
+              <h4>Barre las aceras y patios en seco</h4>
+              <p>Nunca uses la manguera como si fuera una escoba para mover polvo y hojas secas. Usa la escoba y luego pasa un paño húmedo.</p>
+              <span class="savings-chip">Ahorro: 150L a 200L por limpieza</span>
+            </div>
+          </div>
+
+          <div class="guide-item">
+            <div class="guide-item-icon">💧</div>
+            <div>
+              <h4>Riego por goteo localizado</h4>
+              <p>Aplica el agua directo en la tierra con mangueras perforadas o botellas recicladas con gotero.</p>
+              <span class="savings-chip">Ahorro: 60% frente a aspersores</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="guide-visual">
+          <img src="assets/agua_sostenible.jpg" alt="Vivienda ecológica moderna con sistemas de ahorro y captación de agua" loading="lazy">
+        </div>
+      </div>
+
+      <!-- Contenido Tab 4: Cosecha de Lluvia -->
+      <div class="guide-tab-content" id="tab-lluvia">
+        <div class="guide-card-list">
+          <div class="guide-item">
+            <div class="guide-item-icon">🌧️</div>
+            <div>
+              <h4>Canaletas en techos con filtro de malla</h4>
+              <p>Captura el agua de lluvia que desciende de los techos hacia tanques de reserva para riego, limpieza o sanitarios.</p>
+              <span class="savings-chip">Ahorro: Miles de litros al año</span>
+            </div>
+          </div>
+
+          <div class="guide-item">
+            <div class="guide-item-icon">🪣</div>
+            <div>
+              <h4>Reutilización de agua de aire acondicionado</h4>
+              <p>El condensado de los aires acondicionados es agua destilada limpia ideal para regar plantas, limpiar pisos o planchar.</p>
+              <span class="savings-chip">Recuperación: 10L a 25L por día/equipo</span>
+            </div>
+          </div>
+
+          <div class="guide-item">
+            <div class="guide-item-icon">🛡️</div>
+            <div>
+              <h4>Tanques herméticos para evitar mosquitos</h4>
+              <p>Toda agua almacenada debe tener tapa hermética o malla fina para evitar la proliferación de mosquitos y mantenerla limpia.</p>
+              <span class="savings-chip">Salud & seguridad ambiental</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="guide-visual">
+          <img src="assets/agua_sostenible.jpg" alt="Vivienda ecológica moderna con sistemas de ahorro y captación de agua" loading="lazy">
+        </div>
+      </div>
+    </section>
+
+    <!-- TRIVIA INTERACTIVA: ¿CUÁNTO SABES DEL AGUA? -->
+    <section class="section" id="trivia">
+      <div class="section-header">
+        <span class="section-tag">Desafío Educativo</span>
+        <h2 class="section-title">Trivia: ¿Cuánto Sabes Sobre el Agua?</h2>
+        <p class="section-desc">
+          Pon a prueba tus conocimientos sobre el agua potable, su escasez y los datos más asombrosos del planeta.
+        </p>
+      </div>
+
+      <div class="trivia-card">
+        <div class="trivia-header">
+          <span style="font-weight: 700; color: var(--primary-cyan);">Pregunta de Conciencia</span>
+          <span id="quizScoreEl" style="font-weight: 800; font-family: var(--font-heading);">Puntaje: 0 / 4</span>
+        </div>
+
+        <h3 class="question-text" id="quizQuestionText">Cargando pregunta...</h3>
+
+        <div class="options-grid" id="quizOptionsGrid">
+          <!-- Opciones dinámicas -->
+        </div>
+
+        <div class="quiz-feedback" id="quizFeedback"></div>
+
+        <div style="text-align: right;">
+          <button class="btn btn-primary" id="quizNextBtn" style="display: none;">
+            Siguiente Pregunta →
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- PACTO CIUDADANO POR EL AGUA -->
+    <section class="section" id="pacto">
+      <div class="pledge-card">
+        <span class="section-tag" style="color: var(--emerald-fresh);">Compromiso Colectivo</span>
+        <h2 class="section-title" style="font-size: 2.3rem;">Firma tu Pacto por el Agua</h2>
+        <p class="section-desc" style="max-width: 600px; margin: 0 auto;">
+          Únete a los miles de guardianes del agua. Selecciona al menos 2 hábitos que te comprometes a cumplir a partir de hoy y genera tu certificado oficial.
+        </p>
+
+        <form id="pledgeForm">
+          <div class="pledge-checklist">
+            <label class="pledge-item">
+              <input type="checkbox" checked>
+              <span>Reducir mis duchas a 5 minutos o menos</span>
+            </label>
+            <label class="pledge-item">
+              <input type="checkbox" checked>
+              <span>Cerrar la llave al cepillarme los dientes y enjabonarme</span>
+            </label>
+            <label class="pledge-item">
+              <input type="checkbox">
+              <span>Reportar y reparar fugas de grifos e inodoros a tiempo</span>
+            </label>
+            <label class="pledge-item">
+              <input type="checkbox">
+              <span>Barrer en seco aceras y patios en lugar de usar manguera</span>
+            </label>
+            <label class="pledge-item">
+              <input type="checkbox">
+              <span>Reutilizar el agua del aire acondicionado para regar</span>
+            </label>
+            <label class="pledge-item">
+              <input type="checkbox">
+              <span>Compartir estos hábitos con mi familia y comunidad</span>
+            </label>
+          </div>
+
+          <div class="signature-box">
+            <input type="text" id="pledgeNameInput" class="signature-input" placeholder="Tu Nombre Completo..." required>
+            <button type="submit" class="btn btn-primary" style="background: linear-gradient(135deg, var(--emerald-fresh), #059669); color: #fff;">
+              <span>✍️</span> Firmar y Certificar
+            </button>
+          </div>
+        </form>
+
+        <!-- Certificado de Guardián del Agua -->
+        <div class="certificate-output" id="certificateOutput">
+          <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">🏅</div>
+          <h3 class="cert-title">CERTIFICADO DE GUARDIÁN DEL AGUA</h3>
+          <p style="color: var(--text-secondary); font-size: 0.95rem;">Se reconoce solemnemente el compromiso ecológico y responsable de:</p>
+          <div class="cert-name" id="certHolderName">Nombre del Ciudadano</div>
+          <p style="color: var(--text-primary); max-width: 500px; margin: 0 auto; font-size: 0.9rem;">
+            Por asumir la misión de proteger, valorar y conservar cada gota de agua dulce para las generaciones presentes y futuras.
+          </p>
+          <div style="margin-top: 1.25rem; font-size: 0.8rem; color: var(--primary-cyan); font-weight: 700;">
+            Expedido el <span id="certDate">15 de octubre de 2026</span> • Red Global del Agua
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <p class="footer-quote">
+      "El agua es la fuerza motriz de toda la naturaleza." — Leonardo da Vinci
+    </p>
+    <p class="footer-desc">
+      Iniciativa educativa y digital orientada a la concienciación ciudadana, el desarrollo sostenible (ODS 6: Agua Limpia y Saneamiento) y la preservación ecológica.
+    </p>
+    <div class="footer-copy">
+      Desarrollado con dedicación para el uso consciente del agua • Antigravity Web Studio
+    </div>
+  </footer>
+
+  <!-- Script interactivo -->
+  <script src="script.js"></script>
+</body>
+</html>
+
+
+
+
+
+
+/* ==========================================================================
+   USO DEL AGUA - ESTILOS PRINCIPALES
+   Estética acuática de vanguardia, glassmorphism, animaciones y fluidez
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@400;600;700;800;900&display=swap');
+
+:root {
+  /* Paleta Acuática y Fresca */
+  --bg-deep: #030b15;
+  --bg-marine: #071626;
+  --bg-card: rgba(10, 28, 48, 0.7);
+  --bg-card-hover: rgba(16, 42, 71, 0.85);
+  
+  --primary-cyan: #00d2ff;
+  --primary-blue: #0077b6;
+  --aqua-glow: #38bdf8;
+  --emerald-fresh: #10b981;
+  --emerald-glow: rgba(16, 185, 129, 0.35);
+  --warning-amber: #f59e0b;
+  --danger-coral: #f43f5e;
+  
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  
+  --border-glass: rgba(56, 189, 248, 0.2);
+  --border-focus: rgba(0, 210, 255, 0.6);
+  --card-shadow: 0 16px 36px -10px rgba(0, 0, 0, 0.6);
+  --glow-cyan: 0 0 25px rgba(0, 210, 255, 0.4);
+  
+  --font-heading: 'Outfit', sans-serif;
+  --font-body: 'Plus Jakarta Sans', sans-serif;
+  --transition-smooth: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Reset y base */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--bg-deep);
+  color: var(--text-primary);
+  line-height: 1.6;
+  overflow-x: hidden;
+  min-height: 100vh;
+  position: relative;
+}
+
+/* Fondo dinámico con partículas sutiles de agua */
+.ambient-water-bg {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background: 
+    radial-gradient(circle at 15% 25%, rgba(0, 210, 255, 0.08) 0%, transparent 45%),
+    radial-gradient(circle at 85% 75%, rgba(16, 185, 129, 0.06) 0%, transparent 50%),
+    radial-gradient(circle at 50% 50%, rgba(0, 119, 182, 0.07) 0%, transparent 60%);
+}
+
+/* ==========================================================================
+   BARRA SUPERIOR DE ALERTA Y RECURSOS
+   ========================================================================== */
+.top-notice-bar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(3, 11, 21, 0.88);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border-glass);
+  padding: 0.6rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.85rem;
+}
+
+.notice-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: var(--primary-cyan);
+  font-weight: 600;
+}
+
+.droplet-pulse {
+  display: inline-block;
+  animation: floatDrop 2s infinite ease-in-out;
+}
+
+@keyframes floatDrop {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+
+.top-bar-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.btn-ambient-sound {
+  background: rgba(0, 210, 255, 0.1);
+  border: 1px solid rgba(0, 210, 255, 0.25);
+  color: var(--primary-cyan);
+  padding: 0.35rem 0.85rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: var(--transition-smooth);
+}
+
+.btn-ambient-sound:hover {
+  background: rgba(0, 210, 255, 0.2);
+  box-shadow: 0 0 12px rgba(0, 210, 255, 0.3);
+}
+
+.btn-ambient-sound.playing {
+  background: rgba(16, 185, 129, 0.2);
+  border-color: var(--emerald-fresh);
+  color: #34d399;
+}
+
+/* ==========================================================================
+   HEADER Y NAVEGACIÓN
+   ========================================================================== */
+.main-header {
+  position: relative;
+  z-index: 10;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.brand-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  text-decoration: none;
+  color: var(--text-primary);
+}
+
+.brand-icon-box {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(0, 210, 255, 0.25), rgba(0, 119, 182, 0.4));
+  border: 1px solid var(--border-glass);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  box-shadow: 0 0 15px rgba(0, 210, 255, 0.25);
+}
+
+.brand-text h1 {
+  font-family: var(--font-heading);
+  font-size: 1.35rem;
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.5px;
+}
+
+.brand-text span {
+  font-size: 0.75rem;
+  color: var(--primary-cyan);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.main-nav ul {
+  display: flex;
+  list-style: none;
+  gap: 1.5rem;
+}
+
+.main-nav a {
+  text-decoration: none;
+  color: var(--text-secondary);
+  font-weight: 600;
+  font-size: 0.92rem;
+  transition: var(--transition-smooth);
+  position: relative;
+}
+
+.main-nav a:hover,
+.main-nav a:focus {
+  color: var(--primary-cyan);
+}
+
+.main-nav a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0%;
+  height: 2px;
+  background: var(--primary-cyan);
+  box-shadow: 0 0 8px var(--primary-cyan);
+  transition: var(--transition-smooth);
+}
+
+.main-nav a:hover::after {
+  width: 100%;
+}
+
+/* ==========================================================================
+   HERO SECTION
+   ========================================================================== */
+.hero {
+  position: relative;
+  z-index: 10;
+  max-width: 1280px;
+  margin: 1.5rem auto 4.5rem;
+  padding: 0 1.5rem;
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 3rem;
+  align-items: center;
+}
+
+.hero-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.9rem;
+  border-radius: 30px;
+  background: rgba(0, 210, 255, 0.1);
+  border: 1px solid var(--border-glass);
+  color: var(--primary-cyan);
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin-bottom: 1.25rem;
+}
+
+.hero-title {
+  font-family: var(--font-heading);
+  font-size: 3.4rem;
+  line-height: 1.1;
+  font-weight: 900;
+  letter-spacing: -1.5px;
+  margin-bottom: 1.25rem;
+}
+
+.hero-title .highlight-aqua {
+  color: var(--primary-cyan);
+  text-shadow: var(--glow-cyan);
+  position: relative;
+  display: inline-block;
+}
+
+.hero-title .highlight-emerald {
+  color: var(--emerald-fresh);
+}
+
+.hero-desc {
+  font-size: 1.15rem;
+  color: var(--text-secondary);
+  margin-bottom: 2rem;
+  max-width: 580px;
+  line-height: 1.65;
+}
+
+.hero-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.stat-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-glass);
+  border-radius: 16px;
+  padding: 1.15rem 1rem;
+  backdrop-filter: blur(12px);
+  transition: var(--transition-smooth);
+}
+
+.stat-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--primary-cyan);
+  box-shadow: 0 8px 25px rgba(0, 210, 255, 0.15);
+}
+
+.stat-num {
+  font-family: var(--font-heading);
+  font-size: 1.9rem;
+  font-weight: 800;
+  color: var(--primary-cyan);
+  line-height: 1.1;
+  margin-bottom: 0.25rem;
+}
+
+.stat-label {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  padding: 0.85rem 1.6rem;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  text-decoration: none;
+  transition: var(--transition-smooth);
+  border: none;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary-cyan), var(--primary-blue));
+  color: #030b15;
+  box-shadow: 0 4px 20px rgba(0, 210, 255, 0.35);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 28px rgba(0, 210, 255, 0.55);
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-primary);
+  border: 1px solid var(--border-glass);
+  backdrop-filter: blur(8px);
+}
+
+.btn-secondary:hover {
+  background: rgba(0, 210, 255, 0.12);
+  border-color: var(--primary-cyan);
+  color: var(--primary-cyan);
+}
+
+.hero-image-card {
+  position: relative;
+  border-radius: 24px;
+  overflow: hidden;
+  border: 1px solid var(--border-glass);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+}
+
+.hero-image-card img {
+  width: 100%;
+  height: 440px;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.6s ease;
+}
+
+.hero-image-card:hover img {
+  transform: scale(1.03);
+}
+
+.hero-image-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(3, 11, 21, 0.9) 0%, rgba(3, 11, 21, 0.25) 50%, transparent 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 1.75rem;
+}
+
+.overlay-badge {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--primary-cyan);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 0.25rem;
+}
+
+.overlay-caption {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+/* ==========================================================================
+   SECCIONES GENERALES
+   ========================================================================== */
+.section {
+  position: relative;
+  z-index: 10;
+  max-width: 1280px;
+  margin: 0 auto 5rem;
+  padding: 0 1.5rem;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 3rem;
+  max-width: 720px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.section-tag {
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--primary-cyan);
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.section-title {
+  font-family: var(--font-heading);
+  font-size: 2.4rem;
+  font-weight: 800;
+  letter-spacing: -1px;
+  margin-bottom: 0.75rem;
+}
+
+.section-desc {
+  font-size: 1.05rem;
+  color: var(--text-secondary);
+}
+
+/* ==========================================================================
+   CALCULADORA DE HUELLA HÍDRICA
+   ========================================================================== */
+.calc-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-glass);
+  border-radius: 24px;
+  padding: 2.5rem;
+  backdrop-filter: blur(16px);
+  display: grid;
+  grid-template-columns: 1.3fr 0.9fr;
+  gap: 3rem;
+}
+
+.calc-sliders {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+}
+
+.slider-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.slider-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.slider-label {
+  font-weight: 600;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.slider-val-badge {
+  background: rgba(0, 210, 255, 0.12);
+  color: var(--primary-cyan);
+  padding: 0.2rem 0.6rem;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.88rem;
+  border: 1px solid rgba(0, 210, 255, 0.25);
+}
+
+/* Custom Range Input */
+input[type="range"] {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 8px;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.12);
+  outline: none;
+  transition: var(--transition-smooth);
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--primary-cyan);
+  cursor: pointer;
+  box-shadow: 0 0 12px var(--primary-cyan);
+  transition: transform 0.15s ease;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+/* Panel de Resultados de Huella */
+.footprint-result-box {
+  background: linear-gradient(145deg, rgba(7, 22, 38, 0.95), rgba(11, 33, 56, 0.95));
+  border: 1px solid var(--border-glass);
+  border-radius: 20px;
+  padding: 2.25rem 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-align: center;
+  box-shadow: inset 0 0 25px rgba(0, 210, 255, 0.05);
+}
+
+.footprint-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: var(--primary-cyan);
+}
+
+.footprint-main-metric {
+  margin: 1.5rem 0;
+}
+
+.metric-number {
+  font-family: var(--font-heading);
+  font-size: 4.2rem;
+  font-weight: 900;
+  color: var(--primary-cyan);
+  line-height: 1;
+  text-shadow: 0 0 30px rgba(0, 210, 255, 0.35);
+}
+
+.metric-unit {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+}
+
+.progress-container {
+  background: rgba(255, 255, 255, 0.08);
+  height: 12px;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 0.75rem;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  width: 50%;
+  background: linear-gradient(90deg, var(--emerald-fresh), var(--primary-cyan));
+  transition: width 0.4s ease, background 0.4s ease;
+}
+
+.target-reference {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-bottom: 1.5rem;
+}
+
+.footprint-verdict {
+  background: rgba(255, 255, 255, 0.04);
+  border-left: 3px solid var(--primary-cyan);
+  border-radius: 10px;
+  padding: 1rem;
+  font-size: 0.88rem;
+  color: var(--text-primary);
+  text-align: left;
+}
+
+/* ==========================================================================
+   SIMULADOR DEL GRIFO QUE GOTEA (FUGAS)
+   ========================================================================== */
+.tap-sim-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-glass);
+  border-radius: 24px;
+  padding: 2.5rem;
+  backdrop-filter: blur(16px);
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: 3rem;
+  align-items: center;
+}
+
+.tap-visual-stage {
+  background: radial-gradient(circle at 50% 30%, rgba(0, 210, 255, 0.15) 0%, rgba(3, 11, 21, 0.6) 70%);
+  border: 1px solid var(--border-glass);
+  border-radius: 20px;
+  height: 320px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2rem 1rem;
+}
+
+.tap-spout {
+  font-size: 4rem;
+  line-height: 1;
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.5));
+}
+
+.water-drop {
+  width: 14px;
+  height: 20px;
+  background: linear-gradient(to bottom, #a5f3fc, #00d2ff);
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  box-shadow: 0 0 12px rgba(0, 210, 255, 0.8);
+  position: absolute;
+  top: 90px;
+  left: 50%;
+  transform: translateX(-50%);
+  animation: dropFall 1.5s infinite ease-in;
+}
+
+@keyframes dropFall {
+  0% {
+    top: 90px;
+    opacity: 0;
+    transform: translateX(-50%) scale(0.6);
+  }
+  30% {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+  }
+  90% {
+    top: 240px;
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+  }
+  100% {
+    top: 250px;
+    opacity: 0;
+    transform: translateX(-50%) scale(1.4);
+  }
+}
+
+.tap-basin {
+  width: 160px;
+  height: 40px;
+  border: 2px solid var(--border-glass);
+  border-top: none;
+  border-radius: 0 0 80px 80px;
+  background: rgba(0, 210, 255, 0.08);
+  position: relative;
+}
+
+.ripple-circle {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 20px;
+  height: 6px;
+  border: 2px solid var(--primary-cyan);
+  border-radius: 50%;
+  opacity: 0;
+  animation: rippleExpand 1.5s infinite ease-out;
+}
+
+@keyframes rippleExpand {
+  0%, 85% {
+    width: 10px;
+    height: 4px;
+    opacity: 0;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    width: 90px;
+    height: 20px;
+    opacity: 0;
+  }
+}
+
+.tap-controls-box h3 {
+  font-family: var(--font-heading);
+  font-size: 1.6rem;
+  margin-bottom: 0.5rem;
+}
+
+.tap-controls-box p {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  margin-bottom: 1.5rem;
+}
+
+.leak-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.leak-stat-box {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-glass);
+  border-radius: 12px;
+  padding: 1rem;
+  text-align: center;
+}
+
+.leak-stat-val {
+  font-family: var(--font-heading);
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--danger-coral);
+}
+
+.leak-stat-lbl {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+}
+
+.btn-fix-tap {
+  background: linear-gradient(135deg, var(--emerald-fresh), #059669);
+  color: #ffffff;
+  box-shadow: 0 4px 18px var(--emerald-glow);
+  width: 100%;
+}
+
+.btn-fix-tap:hover {
+  box-shadow: 0 6px 25px var(--emerald-glow);
+  transform: translateY(-2px);
+}
+
+/* ==========================================================================
+   HUELLA HÍDRICA OCULTA (AGUA VIRTUAL EN PRODUCTOS)
+   ========================================================================== */
+.virtual-water-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.25rem;
+}
+
+.virtual-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-glass);
+  border-radius: 18px;
+  padding: 1.75rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: var(--transition-smooth);
+}
+
+.virtual-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--primary-cyan);
+  box-shadow: var(--card-shadow);
+}
+
+.virtual-icon {
+  font-size: 2.2rem;
+  margin-bottom: 0.75rem;
+  display: inline-block;
+}
+
+.virtual-title {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 0.4rem;
+}
+
+.virtual-liters {
+  font-family: var(--font-heading);
+  font-size: 1.8rem;
+  font-weight: 900;
+  color: var(--primary-cyan);
+  display: flex;
+  align-items: baseline;
+  gap: 0.3rem;
+  margin-bottom: 0.75rem;
+}
+
+.virtual-liters span {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.virtual-desc {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+/* ==========================================================================
+   GUÍA PRÁCTICA & COSECHA DE LLUVIA
+   ========================================================================== */
+.guide-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.guide-tab-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-glass);
+  color: var(--text-secondary);
+  padding: 0.65rem 1.4rem;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.guide-tab-btn.active,
+.guide-tab-btn:hover {
+  background: rgba(0, 210, 255, 0.15);
+  border-color: var(--primary-cyan);
+  color: var(--primary-cyan);
+}
+
+.guide-tab-content {
+  display: none;
+}
+
+.guide-tab-content.active {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  align-items: center;
+}
+
+.guide-card-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.guide-item {
+  background: var(--bg-card);
+  border: 1px solid var(--border-glass);
+  border-radius: 14px;
+  padding: 1.25rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  transition: var(--transition-smooth);
+}
+
+.guide-item:hover {
+  border-color: var(--emerald-fresh);
+  transform: translateX(4px);
+}
+
+.guide-item-icon {
+  font-size: 1.6rem;
+  background: rgba(16, 185, 129, 0.15);
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.guide-item h4 {
+  font-size: 1.05rem;
+  margin-bottom: 0.25rem;
+}
+
+.guide-item p {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.savings-chip {
+  display: inline-block;
+  margin-top: 0.4rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--emerald-fresh);
+  background: rgba(16, 185, 129, 0.1);
+  padding: 0.2rem 0.5rem;
+  border-radius: 6px;
+}
+
+.guide-visual img {
+  width: 100%;
+  height: 380px;
+  object-fit: cover;
+  border-radius: 20px;
+  border: 1px solid var(--border-glass);
+}
+
+/* ==========================================================================
+   TRIVIA INTERACTIVA: ¿CUÁNTO SABES?
+   ========================================================================== */
+.trivia-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-glass);
+  border-radius: 24px;
+  padding: 2.5rem;
+  backdrop-filter: blur(16px);
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.trivia-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border-glass);
+  padding-bottom: 1rem;
+}
+
+.question-text {
+  font-family: var(--font-heading);
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+}
+
+.options-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.85rem;
+  margin-bottom: 1.5rem;
+}
+
+.option-btn {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-glass);
+  color: var(--text-primary);
+  padding: 1rem 1.25rem;
+  border-radius: 12px;
+  text-align: left;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.option-btn:hover {
+  background: rgba(0, 210, 255, 0.1);
+  border-color: var(--primary-cyan);
+}
+
+.option-btn.correct {
+  background: rgba(16, 185, 129, 0.2);
+  border-color: var(--emerald-fresh);
+  color: #34d399;
+}
+
+.option-btn.incorrect {
+  background: rgba(244, 63, 94, 0.2);
+  border-color: var(--danger-coral);
+  color: #fda4af;
+}
+
+.quiz-feedback {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  padding: 1rem;
+  font-size: 0.9rem;
+  display: none;
+  margin-bottom: 1.25rem;
+}
+
+/* ==========================================================================
+   PACTO CIUDADANO POR EL AGUA (COMPROMISO)
+   ========================================================================== */
+.pledge-card {
+  background: linear-gradient(135deg, rgba(7, 22, 38, 0.95), rgba(16, 42, 71, 0.9));
+  border: 1px solid var(--border-glass);
+  border-radius: 24px;
+  padding: 3rem;
+  max-width: 860px;
+  margin: 0 auto;
+  text-align: center;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+}
+
+.pledge-checklist {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  text-align: left;
+  margin: 2rem 0;
+}
+
+.pledge-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--border-glass);
+  padding: 0.85rem 1rem;
+  border-radius: 12px;
+  font-size: 0.88rem;
+  cursor: pointer;
+}
+
+.pledge-item input {
+  accent-color: var(--emerald-fresh);
+  width: 18px;
+  height: 18px;
+}
+
+.signature-box {
+  display: flex;
+  gap: 1rem;
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+.signature-input {
+  flex: 1;
+  padding: 0.85rem 1.2rem;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border-glass);
+  color: var(--text-primary);
+  font-size: 0.95rem;
+  outline: none;
+}
+
+.signature-input:focus {
+  border-color: var(--primary-cyan);
+  box-shadow: 0 0 12px rgba(0, 210, 255, 0.3);
+}
+
+/* Certificado Dinámico Generado */
+.certificate-output {
+  display: none;
+  background: radial-gradient(circle at 50% 50%, rgba(0, 210, 255, 0.15) 0%, rgba(3, 11, 21, 0.9) 80%);
+  border: 2px solid var(--primary-cyan);
+  border-radius: 18px;
+  padding: 2rem;
+  margin-top: 2rem;
+  box-shadow: 0 0 30px rgba(0, 210, 255, 0.25);
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.cert-title {
+  font-family: var(--font-heading);
+  font-size: 1.6rem;
+  color: var(--primary-cyan);
+  margin-bottom: 0.5rem;
+}
+
+.cert-name {
+  font-size: 1.8rem;
+  font-weight: 900;
+  color: #ffffff;
+  text-decoration: underline;
+  text-decoration-color: var(--emerald-fresh);
+  margin: 0.5rem 0;
+}
+
+/* ==========================================================================
+   FOOTER
+   ========================================================================== */
+.site-footer {
+  position: relative;
+  z-index: 10;
+  border-top: 1px solid var(--border-glass);
+  background: rgba(3, 11, 21, 0.95);
+  padding: 3rem 1.5rem;
+  text-align: center;
+}
+
+.footer-quote {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--primary-cyan);
+  margin-bottom: 0.5rem;
+}
+
+.footer-desc {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  max-width: 600px;
+  margin: 0 auto 1.5rem;
+}
+
+.footer-copy {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+/* ==========================================================================
+   RESPONSIVIDAD
+   ========================================================================== */
+@media (max-width: 1024px) {
+  .hero {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+  .hero-image-card img {
+    height: 350px;
+  }
+  .calc-card {
+    grid-template-columns: 1fr;
+  }
+  .tap-sim-card {
+    grid-template-columns: 1fr;
+  }
+  .guide-tab-content.active {
+    grid-template-columns: 1fr;
+  }
+  .guide-visual img {
+    height: 280px;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 2.3rem;
+  }
+  .hero-stats-grid {
+    grid-template-columns: 1fr;
+  }
+  .main-nav {
+    display: none;
+  }
+  .pledge-checklist {
+    grid-template-columns: 1fr;
+  }
+  .signature-box {
+    flex-direction: column;
+  }
+}
