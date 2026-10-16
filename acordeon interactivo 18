@@ -1,0 +1,29 @@
+html
+
+<div class="acordeon">
+    <input type="checkbox" id="seccion1">
+    <label for="seccion1" class="acordeon-titulo">Pregunta Frecuente 1</label>
+    <div class="acordeon-contenido">
+        <p>Esta es la respuesta detallada de la pregunta 1.</p>
+    </div>
+</div>
+
+css
+
+.acordeon-contenido {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+}
+#seccion1 {
+    display: none;
+}
+.acordeon-titulo {
+    display: block;
+    background: #eee;
+    padding: 10px;
+    cursor: pointer;
+}
+#seccion1:checked ~ .acordeon-contenido {
+    max-height: 150px;
+}
