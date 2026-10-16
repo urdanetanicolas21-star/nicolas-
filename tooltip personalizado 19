@@ -1,0 +1,30 @@
+html
+
+<p>Pasa el cursor <span class="tooltip" data-tooltip="Información útil adicional">aquí</span> para ver el mensaje.</p>
+
+css
+
+.tooltip {
+    position: relative;
+    border-bottom: 1px dotted black;
+    cursor: pointer;
+}
+.tooltip::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 125%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #333;
+    color: #fff;
+    padding: 5px 8px;
+    border-radius: 4px;
+    white-space: nowrap;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+.tooltip:hover::after {
+    visibility: visible;
+    opacity: 1;
+}
