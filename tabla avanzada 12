@@ -1,0 +1,36 @@
+html
+
+<table class="tabla-avanzada">
+    <tr>
+        <th rowspan="2">ID</th>
+        <th colspan="2">Información</th>
+    </tr>
+    <tr>
+        <th>Nombre</th>
+        <th>Rol</th>
+    </tr>
+    <tr>
+        <td>1</td>
+        <td>Ana</td>
+        <td>Admin</td>
+    </tr>
+    <tr>
+        <td>2</td>
+        <td>Luis</td>
+        <td>Editor</td>
+    </tr>
+</table>
+
+css
+
+.tabla-avanzada {
+    border-collapse: collapse;
+    width: 100%;
+}
+.tabla-avanzada th, .tabla-avanzada td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+.tabla-avanzada tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
