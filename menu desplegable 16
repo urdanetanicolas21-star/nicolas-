@@ -1,0 +1,30 @@
+html
+
+<ul class="menu">
+    <li><a href="#">Menú</a>
+        <ul class="dropdown">
+            <li><a href="#">Opción 1</a></li>
+            <li><a href="#">Opción 2</a></li>
+        </ul>
+    </li>
+</ul>
+
+css
+
+.menu { list-style: none; padding: 0; }
+.menu > li { position: relative; display: inline-block; background: #007BFF; }
+.menu > li > a { color: white; padding: 10px 15px; display: block; text-decoration: none; }
+.dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    list-style: none;
+    padding: 0;
+    background: #0056b3;
+    min-width: 120px;
+}
+.dropdown li a { color: white; padding: 8px 12px; display: block; text-decoration: none; }
+.menu > li:hover .dropdown {
+    display: block;
+}
