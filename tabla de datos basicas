@@ -1,0 +1,26 @@
+html
+
+<table class="tabla-horario">
+    <tr>
+        <th>dia</th>
+        <th>hora</th>
+        <th>actividad</th>
+    </tr>
+    <tr>
+        <td>lunes</td>
+        <td>8:00 am</td>
+        <td>programacion</td>
+    </tr>
+</table>
+
+css
+
+.tabla-horarios {
+    border-collapse: collapse;
+    width: 100%;
+}
+.tabla-horarios th, .tabla-horarios td {
+    border: 1px solid #ccc;
+    padding: 8px 12px;
+    text-align: left;
+}
