@@ -1,0 +1,14 @@
+html
+
+<h1>receta: panquecas</h1>
+<h2>ingredientes</h2>
+<p>para preparar unas panquecas, necesitas los siguientes ingredientes: <strong>harina</strong>, <em>leche</em>, huevo y azucar.</p>
+<h3>preparación</h3>
+<p>mezcla todos los ingredientes en un bol hasta obtener una masa homogénea..</p>
+
+css
+
+body {
+    font-family: Arial, sans-serif;
+    color: #333333;
+}
