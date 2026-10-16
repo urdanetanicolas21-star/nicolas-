@@ -1,0 +1,15 @@
+html
+
+<div>
+    <img src="imagen.jpg" alt="ejemplo" class="img-flotante"
+    <p>Este es un ejemplo de texto que acompaña a la imagen. La imagen está flotando a la izquierda del texto, permitiendo que el contenido fluya alrededor de ella.</p>
+</div>
+
+css
+
+.img-flotante {
+    float: left;
+    width: 150px;
+    margin-right: 15px;
+    margin-bottom: 10px;
+}
