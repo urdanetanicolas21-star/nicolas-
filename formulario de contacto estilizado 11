@@ -1,0 +1,22 @@
+html
+
+<form class="form-contacto">
+    <label>Nombre: <input type="text"></label>
+    <label>Mensaje: <textarea></textarea></label>
+</form>
+
+css
+
+.form-contacto input, .form-contacto textarea {
+    display: block;
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    outline: none;
+    box-sizing: border-box;
+}
+.form-contacto input:focus, .form-contacto textarea:focus {
+    border-color: #007BFF;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
