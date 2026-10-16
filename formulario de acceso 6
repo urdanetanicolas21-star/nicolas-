@@ -1,0 +1,22 @@
+html
+
+<form>
+    <label for="usuario">Usuario:</label>
+    <input type="text" id="usuario" class="campo">
+
+    <label for="contrasena">Contraseña:</label>
+    <input type="password" id="contrasena" class="campo">
+
+    <button type="submit">Ingresar</button>
+
+</form>
+
+css
+
+.campo {
+    display: block;
+    width: 100%;
+    margin-bottom: 15px;
+    padding: 8px;
+    box-sizing: border-box;
+}
