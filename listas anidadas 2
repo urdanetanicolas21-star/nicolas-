@@ -1,0 +1,27 @@
+html
+
+listas animadas
+
+<ol>
+     <li>introducción
+         <ul>
+            <li> bienvenido</li>
+            <li>objetivos</li>
+         </ul>
+     </li>
+        <li>contenido
+            <ul>
+                <li>conceptos básicos</li>
+                <li>ejercicios prácticos</li>
+            </ul>
+        </li>
+</ol>
+
+css
+
+ol {
+    list-style-type: decimal;
+}
+ul {
+    list-style-type: square;
+}
