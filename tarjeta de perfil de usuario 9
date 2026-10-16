@@ -1,0 +1,20 @@
+html
+
+<div class="card">
+    <div class="card-header"><div>
+    <img srg="avatar.jpg" alt="avatar"
+    <div class="card-body">
+        <h3> nicolas ramirez</h3>
+        <p> desarrollador wed</p>
+    </div>
+</div>
+
+css
+
+.card {
+    position: relative;
+    width: 300px;
+    height: 350px;
+    background: #fff;
+    border: 1xp solid #ddd;
+}
