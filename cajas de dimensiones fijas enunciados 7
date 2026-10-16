@@ -1,0 +1,16 @@
+html
+
+<div class="caja caja1">caja 1 </div>
+<div class="caja caja2">caja 2 </div>   
+<div class="caja caja3">caja 3 </div>
+
+css
+
+.caja {
+    width: 250px;
+    height: 100px;
+    margin: 10px auto;
+}
+.caja1 { background-color: #ff9999; }
+.caja2 { background-color: #99ff99; }
+.caja3 { background-color: #9999ff; }
