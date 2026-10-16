@@ -1,0 +1,24 @@
+html
+
+<div class="galeria">
+    <div class="item-galeria"><img src="img1.jpg" alt="1"></div>
+    <div class="item-galeria"><img src="img2.jpg" alt="2"></div>
+    <div class="item-galeria"><img src="img3.jpg" alt="3"></div>
+</div>
+
+css
+
+.galeria {
+    width: 900px;
+    margin: 0 auto;
+}
+.item-galeria {
+    width: 300px;
+    display: inline-block;
+    box-sizing: border-box;
+    padding: 10px;
+}
+.item-galeria img {
+    width: 100%;
+    height: auto;
+}
