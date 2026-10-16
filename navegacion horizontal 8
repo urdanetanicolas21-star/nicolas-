@@ -1,0 +1,21 @@
+html
+
+<nav>
+    <ul>
+        <li><a href=#>inicio</a><li>
+        <li><a href="#">servicio</a></li>
+        <li><a href="#"> contacto</a></li>
+    </ul>
+</nav>
+
+css
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+nav li {
+    display: inline-block;
+    margin-right: 20px;
+}
