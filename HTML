@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Google Fonts (Jost) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Remixicon Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css">
+
+    <!-- Hoja de Estilos CSS -->
+    <link rel="stylesheet" href="style.css">
+
+    <title>Portafolio Web Personal | nicolas ramirez</title>
+</head>
+
+<body>
+
+    <!-- ==================== HEADER & NAVEGACIÓN ==================== -->
+    <header class="header" id="header">
+        <nav class="nav container">
+            <a href="#home" class="nav__logo">nicolas ramirez<span>.</span></a>
+
+            <div class="nav__menu" id="nav-menu">
+                <ul class="nav__list">
+                    <li class="nav__item"><a href="#home" class="nav__link active-link">Inicio</a></li>
+                    <li class="nav__item"><a href="#services" class="nav__link">Servicios</a></li>
+                    <li class="nav__item"><a href="#skills" class="nav__link">Habilidades</a></li>
+                    <li class="nav__item"><a href="#work" class="nav__link">Proyectos</a></li>
+                    <li class="nav__item"><a href="#resume" class="nav__link">Experiencia</a></li>
+                    <li class="nav__item"><a href="#testimonials" class="nav__link">Testimonios</a></li>
+                    <li class="nav__item"><a href="#contact" class="nav__link">Contacto</a></li>
+                </ul>
+
+                <div class="social__links">
+                    <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" class="social__link"
+                        aria-label="Twitter"><i class="ri-twitter-fill"></i></a>
+                    <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="social__link"
+                        aria-label="GitHub"><i class="ri-github-fill"></i></a>
+                    <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="social__link"
+                        aria-label="LinkedIn"><i class="ri-linkedin-fill"></i></a>
+                    <a href="https://dribbble.com" target="_blank" rel="noopener noreferrer" class="social__link"
+                        aria-label="Dribbble"><i class="ri-dribbble-fill"></i></a>
+                </div>
+            </div>
+
+            <div class="nav__buttons">
+                <!-- Botón de ajustes de tema -->
+                <div class="nav__settings" id="switcher-toggle" title="Personalizar estilo">
+                    <i class="ri-settings-3-line"></i>
+                </div>
+                <!-- Botón menú hamburguesa móvil -->
+                <div class="nav__toggle" id="nav-toggle" title="Menú">
+                    <span></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- ==================== PANEL CAMBIADOR DE ESTILO / COLOR ==================== -->
+    <div class="style__switcher" id="style-switcher">
+        <div class="style__switcher-header">
+            <h2 class="style__switcher-title">Personalizar Tema</h2>
+            <div class="style__switcher-close" id="switcher-close" title="Cerrar"><i class="ri-close-line"></i></div>
+        </div>
+
+        <div class="style__switcher-item">
+            <h3 class="style__switcher-subtitle">Color de Acento</h3>
+            <div class="style__switcher-colors">
+                <span class="style__switcher-color active-color" data-hue="165" title="Esmeralda"
+                    style="--c: hsl(165, 84%, 48%);"><i class="ri-check-line"></i></span>
+                <span class="style__switcher-color" data-hue="354" title="Rojo Rubí" style="--c: hsl(354, 84%, 55%);"><i
+                        class="ri-check-line"></i></span>
+                <span class="style__switcher-color" data-hue="225" title="Azul Real" style="--c: hsl(225, 84%, 56%);"><i
+                        class="ri-check-line"></i></span>
+                <span class="style__switcher-color" data-hue="43" title="Ámbar / Oro" style="--c: hsl(43, 90%, 50%);"><i
+                        class="ri-check-line"></i></span>
+                <span class="style__switcher-color" data-hue="270" title="Púrpura" style="--c: hsl(270, 84%, 58%);"><i
+                        class="ri-check-line"></i></span>
+            </div>
+        </div>
+
+        <div class="style__switcher-item">
+            <h3 class="style__switcher-subtitle">Modo de Apariencia</h3>
+            <div class="style__switcher-themes">
+                <label class="theme-option">
+                    <input type="radio" name="theme" value="light" id="light-theme">
+                    <span><i class="ri-sun-line"></i> Claro</span>
+                </label>
+                <label class="theme-option">
+                    <input type="radio" name="theme" value="dark" id="dark-theme" checked>
+                    <span><i class="ri-moon-line"></i> Oscuro</span>
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== CONTENIDO PRINCIPAL ==================== -->
+    <main class="main">
+
+        <!-- ==================== HOME / INICIO ==================== -->
+        <section class="home section" id="home">
+            <div class="home__container container grid">
+
+                <div class="home__content">
+                    <span class="home__greeting">¡Hola a todos! 👋</span>
+                    <h2 class="home__subtitle">Soy <span>Zoe Miller</span></h2>
+                    <h1 class="home__title">Desarrolladora Frontend & UI/UX</h1>
+                    <p class="home__description">
+                        Especializada en crear interfaces interactivas, accesibles y de alto rendimiento. Convierto
+                        ideas complejas en experiencias web fluidas y atractivas utilizando tecnologías modernas.
+                    </p>
+
+                    <div class="home__btns">
+                        <a href="assets/pdf/cv.pdf" download="CV-Zoe-Miller.pdf" class="btn btn--primary">
+                            <i class="ri-download-2-line"></i> Descargar CV
+                        </a>
+                        <a href="#work" class="btn btn--outline">
+                            <i class="ri-eye-line"></i> Ver Trabajos
+                        </a>
+                    </div>
+
+                    <!-- Estadísticas Rápidas -->
+                    <div class="home__stats">
+                        <div class="home__stat-item">
+                            <span class="home__stat-number">+4</span>
+                            <span class="home__stat-label">Años de<br>Experiencia</span>
+                        </div>
+                        <div class="home__stat-item">
+                            <span class="home__stat-number">+35</span>
+                            <span class="home__stat-label">Proyectos<br>Completados</span>
+                        </div>
+                        <div class="home__stat-item">
+                            <span class="home__stat-number">+20</span>
+                            <span class="home__stat-label">Clientes<br>Satisfechos</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="home__img-wrapper">
+                    <div class="home__blob">
+                        <img src="assets/img/home-profile.svg" alt="Foto de Perfil de Zoe Miller" class="home__img">
+                    </div>
+
+                    <!-- Tarjetas flotantes decorativas -->
+                    <div class="home__floating-badge badge-1">
+                        <i class="ri-code-s-slash-line"></i>
+                        <div>
+                            <h4>Clean Code</h4>
+                            <p>HTML5 • CSS3 • JS</p>
+                        </div>
+                    </div>
+                    <div class="home__floating-badge badge-2">
+                        <i class="ri-palette-line"></i>
+                        <div>
+                            <h4>UI/UX Design</h4>
+                            <p>Modern & Responsive</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ==================== SERVICIOS ==================== -->
+        <section class="services section" id="services">
+            <h2 class="section__title" data-title="Mis Servicios">Lo Que Hago</h2>
+            <p class="section__description">Soluciones a medida para proyectos web modernos, escalables y visualmente
+                impactantes.</p>
+
+            <div class="services__container container swiper">
+                <div class="swiper-wrapper">
+
+                    <!-- Slide 1 -->
+                    <div class="card services__card swiper-slide">
+                        <div class="services__icon">
+                            <i class="ri-layout-4-line"></i>
+                        </div>
+                        <h3 class="services__title">Diseño Web UI/UX</h3>
+                        <p class="services__description">
+                            Interfaces intuitivas centradas en el usuario con wireframes, prototipos y sistemas de
+                            diseño consistentes.
+                        </p>
+                        <ul class="services__list">
+                            <li><i class="ri-check-line"></i> Prototipado en Figma</li>
+                            <li><i class="ri-check-line"></i> Arquitectura de Información</li>
+                            <li><i class="ri-check-line"></i> Diseño Responsive Multi-dispositivo</li>
+                        </ul>
+                    </div>
+
+                    <!-- Slide 2 -->
+                    <div class="card services__card swiper-slide">
+                        <div class="services__icon">
+                            <i class="ri-code-box-line"></i>
+                        </div>
+                        <h3 class="services__title">Desarrollo Frontend</h3>
+                        <p class="services__description">
+                            Construcción de aplicaciones web interactivas con HTML semántico, CSS modular y JavaScript
+                            vanilla o React.
+                        </p>
+                        <ul class="services__list">
+                            <li><i class="ri-check-line"></i> Código Limpio y Estructurado</li>
+                            <li><i class="ri-check-line"></i> Componentes Reutilizables</li>
+                            <li><i class="ri-check-line"></i> Animaciones y Micro-interacciones</li>
+                        </ul>
+                    </div>
+
+                    <!-- Slide 3 -->
+                    <div class="card services__card swiper-slide">
+                        <div class="services__icon">
+                            <i class="ri-smartphone-line"></i>
+                        </div>
+                        <h3 class="services__title">Diseño Adaptable (Responsive)</h3>
+                        <p class="services__description">
+                            Garantía de rendimiento y visualización impecable en móviles, tablets, laptops y pantallas
+                            ultra anchas.
+                        </p>
+                        <ul class="services__list">
+                            <li><i class="ri-check-line"></i> Enfoque Mobile-First</li>
+                            <li><i class="ri-check-line"></i> Flexbox & CSS Grid avanzado</li>
+                            <li><i class="ri-check-line"></i> Compatibilidad cross-browser</li>
+                        </ul>
+                    </div>
+
+                    <!-- Slide 4 -->
+                    <div class="card services__card swiper-slide">
+                        <div class="services__icon">
+                            <i class="ri-speed-up-line"></i>
+                        </div>
+                        <h3 class="services__title">Optimización Web & SEO</h3>
+                        <p class="services__description">
+                            Mejora de tiempos de carga, accesibilidad web (WCAG) y posicionamiento orgánico en motores
+                            de búsqueda.
+                        </p>
+                        <ul class="services__list">
+                            <li><i class="ri-check-line"></i> Core Web Vitals</li>
+                            <li><i class="ri-check-line"></i> Optimización de Imágenes y Fuentes</li>
+                            <li><i class="ri-check-line"></i> Semántica y Metadatos SEO</li>
+                        </ul>
+                    </div>
+
+                    <!-- Slide 5 -->
+                    <div class="card services__card swiper-slide">
+                        <div class="services__icon">
+                            <i class="ri-links-line"></i>
+                        </div>
+                        <h3 class="services__title">Integración de APIs</h3>
+                        <p class="services__description">
+                            Conexión de servicios backend, pasarelas de pago, autenticación y consumo de datos RESTful
+                            asíncronos.
+                        </p>
+                        <ul class="services__list">
+                            <li><i class="ri-check-line"></i> Consumo Asíncrono (Fetch / Async-Await)</li>
+                            <li><i class="ri-check-line"></i> Manejo de Respuestas JSON</li>
+                            <li><i class="ri-check-line"></i> Conexión con servicios de terceros</li>
+                        </ul>
+                    </div>
+
+                </div>
+                <!-- Paginación Swiper -->
+                <div class="swiper-pagination"></div>
+            </div>
+        </section>
+
+        <!-- ==================== HABILIDADES ==================== -->
+        <section class="skills section" id="skills">
+            <h2 class="section__title" data-title="Mis Capacidades">Habilidades Técnicas</h2>
+            <p class="section__description">Mi nivel de competencia en las herramientas y tecnologías clave del
+                desarrollo moderno.</p>
+
+            <div class="skills__container container grid">
+
+                <!-- Columna 1: Frontend Core -->
+                <div class="skills__group card">
+                    <h3 class="skills__subtitle"><i class="ri-code-s-line"></i> Desarrollo Frontend</h3>
+
+                    <div class="skills__list">
+                        <div class="skills__item">
+                            <div class="skills__header">
+                                <span class="skills__name"><i class="ri-html5-fill"></i> HTML5 & CSS3</span>
+                                <span class="skills__value">95%</span>
+                            </div>
+                            <div class="skills__bar"><span class="skills__percentage" style="width: 95%;"></span></div>
+                        </div>
+
+                        <div class="skills__item">
+                            <div class="skills__header">
+                                <span class="skills__name"><i class="ri-javascript-fill"></i> JavaScript (ES6+)</span>
+                                <span class="skills__value">88%</span>
+                            </div>
+                            <div class="skills__bar"><span class="skills__percentage" style="width: 88%;"></span></div>
+                        </div>
+
+                        <div class="skills__item">
+                            <div class="skills__header">
+                                <span class="skills__name"><i class="ri-reactjs-fill"></i> React.js</span>
+                                <span class="skills__value">82%</span>
+                            </div>
+                            <div class="skills__bar"><span class="skills__percentage" style="width: 82%;"></span></div>
+                        </div>
+
+                        <div class="skills__item">
+                            <div class="skills__header">
+                                <span class="skills__name"><i class="ri-smartphone-line"></i> Responsive Design</span>
+                                <span class="skills__value">95%</span>
+                            </div>
+                            <div class="skills__bar"><span class="skills__percentage" style="width: 95%;"></span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Columna 2: Herramientas & Diseño -->
+                <div class="skills__group card">
+                    <h3 class="skills__subtitle"><i class="ri-tools-line"></i> Herramientas & Diseño</h3>
+
+                    <div class="skills__list">
+                        <div class="skills__item">
+                            <div class="skills__header">
+                                <span class="skills__name"><i class="ri-git-branch-line"></i> Git & GitHub</span>
+                                <span class="skills__value">85%</span>
+                            </div>
+                            <div class="skills__bar"><span class="skills__percentage" style="width: 85%;"></span></div>
+                        </div>
+
+                        <div class="skills__item">
+                            <div class="skills__header">
+                                <span class="skills__name"><i class="ri-paint-brush-line"></i> Figma & UI/UX</span>
+                                <span class="skills__value">78%</span>
+                            </div>
+                            <div class="skills__bar"><span class="skills__percentage" style="width: 78%;"></span></div>
+                        </div>
+
+                        <div class="skills__item">
+                            <div class="skills__header">
+                                <span class="skills__name"><i class="ri-css3-line"></i> Tailwind CSS & Sass</span>
+                                <span class="skills__value">86%</span>
+                            </div>
+                            <div class="skills__bar"><span class="skills__percentage" style="width: 86%;"></span></div>
+                        </div>
+
+                        <div class="skills__item">
+                            <div class="skills__header">
+                                <span class="skills__name"><i class="ri-server-line"></i> REST APIs & Node.js</span>
+                                <span class="skills__value">72%</span>
+                            </div>
+                            <div class="skills__bar"><span class="skills__percentage" style="width: 72%;"></span></div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ==================== PROYECTOS / PORTAFOLIO ==================== -->
+        <section class="work section" id="work">
+            <h2 class="section__title" data-title="Mi Portafolio">Proyectos Recientes</h2>
+            <p class="section__description">Una selección de proyectos destacados organizados por categorías.</p>
+
+            <!-- Filtros de MixItUp -->
+            <ul class="work__filters container">
+                <li class="work__item active-work" data-filter="all">Todos</li>
+                <li class="work__item" data-filter=".web">Web</li>
+                <li class="work__item" data-filter=".app">Apps</li>
+                <li class="work__item" data-filter=".design">Diseño</li>
+            </ul>
+
+            <div class="work__container container grid">
+
+                <!-- Proyecto 1: Web -->
+                <div class="card work__card mix web">
+                    <div class="work__img-box">
+                        <img src="assets/img/project1.svg" alt="Sitio E-commerce" class="work__img">
+                        <div class="work__overlay">
+                            <a href="#contact" class="work__overlay-btn" title="Ver Demostración"><i
+                                    class="ri-link"></i></a>
+                            <a href="https://github.com" target="_blank" rel="noopener noreferrer"
+                                class="work__overlay-btn" title="Ver Código"><i class="ri-github-line"></i></a>
+                        </div>
+                    </div>
+                    <div class="work__content">
+                        <span class="work__tag">E-Commerce • Web</span>
+                        <h3 class="work__title">Tienda Online Moderna</h3>
+                        <p class="work__description">Plataforma de compras con catálogo filtrable, carrito persistente y
+                            pasarela de pago simulada.</p>
+                        <a href="#contact" class="work__button">
+                            Ver detalles <i class="ri-arrow-right-line"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Proyecto 2: App -->
+                <div class="card work__card mix app">
+                    <div class="work__img-box">
+                        <img src="assets/img/project2.svg" alt="App de Tareas" class="work__img">
+                        <div class="work__overlay">
+                            <a href="#contact" class="work__overlay-btn" title="Ver Demostración"><i
+                                    class="ri-link"></i></a>
+                            <a href="https://github.com" target="_blank" rel="noopener noreferrer"
+                                class="work__overlay-btn" title="Ver Código"><i class="ri-github-line"></i></a>
+                        </div>
+                    </div>
+                    <div class="work__content">
+                        <span class="work__tag">Productividad • App</span>
+                        <h3 class="work__title">Daily Tasks Mobile Manager</h3>
+                        <p class="work__description">Aplicación web progresiva (PWA) para gestión de tareas diarias con
+                            almacenamiento en LocalStorage.</p>
+                        <a href="#contact" class="work__button">
+                            Ver detalles <i class="ri-arrow-right-line"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Proyecto 3: Web -->
+                <div class="card work__card mix web">
+                    <div class="work__img-box">
+                        <img src="assets/img/project3.svg" alt="Dashboard Analítico" class="work__img">
+                        <div class="work__overlay">
+                            <a href="#contact" class="work__overlay-btn" title="Ver Demostración"><i
+                                    class="ri-link"></i></a>
+                            <a href="https://github.com" target="_blank" rel="noopener noreferrer"
+                                class="work__overlay-btn" title="Ver Código"><i class="ri-github-line"></i></a>
+                        </div>
+                    </div>
+                    <div class="work__content">
+                        <span class="work__tag">SaaS • Dashboard</span>
+                        <h3 class="work__title">Nexus Analytics Panel</h3>
+                        <p class="work__description">Panel administrativo interactivo con métricas en tiempo real,
+                            gráficos vectoriales y modo oscuro.</p>
+                        <a href="#contact" class="work__button">
+                            Ver detalles <i class="ri-arrow-right-line"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Proyecto 4: App -->
+                <div class="card work__card mix app">
+                    <div class="work__img-box">
+                        <img src="assets/img/project4.svg" alt="App del Clima" class="work__img">
+                        <div class="work__overlay">
+                            <a href="#contact" class="work__overlay-btn" title="Ver Demostración"><i
+                                    class="ri-link"></i></a>
+                            <a href="https://github.com" target="_blank" rel="noopener noreferrer"
+                                class="work__overlay-btn" title="Ver Código"><i class="ri-github-line"></i></a>
+                        </div>
+                    </div>
+                    <div class="work__content">
+                        <span class="work__tag">API REST • App</span>
+                        <h3 class="work__title">Weather Forecast Live</h3>
+                        <p class="work__description">App del pronóstico del tiempo con geolocalización, búsqueda global
+                            de ciudades y datos dinámicos.</p>
+                        <a href="#contact" class="work__button">
+                            Ver detalles <i class="ri-arrow-right-line"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Proyecto 5: Diseño -->
+                <div class="card work__card mix design">
+                    <div class="work__img-box">
+                        <img src="assets/img/project5.svg" alt="Creative Studio Branding" class="work__img">
+                        <div class="work__overlay">
+                            <a href="#contact" class="work__overlay-btn" title="Ver Demostración"><i
+                                    class="ri-link"></i></a>
+                            <a href="https://github.com" target="_blank" rel="noopener noreferrer"
+                                class="work__overlay-btn" title="Ver Código"><i class="ri-github-line"></i></a>
+                        </div>
+                    </div>
+                    <div class="work__content">
+                        <span class="work__tag">Branding • UI/UX</span>
+                        <h3 class="work__title">Creative Studio Identity</h3>
+                        <p class="work__description">Identidad de marca completa, manual de diseño, paleta tipográfica y
+                            landing page promocional.</p>
+                        <a href="#contact" class="work__button">
+                            Ver detalles <i class="ri-arrow-right-line"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Proyecto 6: Web -->
+                <div class="card work__card mix web">
+                    <div class="work__img-box">
+                        <img src="assets/img/project6.svg" alt="Plataforma Educativa" class="work__img">
+                        <div class="work__overlay">
+                            <a href="#contact" class="work__overlay-btn" title="Ver Demostración"><i
+                                    class="ri-link"></i></a>
+                            <a href="https://github.com" target="_blank" rel="noopener noreferrer"
+                                class="work__overlay-btn" title="Ver Código"><i class="ri-github-line"></i></a>
+                        </div>
+                    </div>
+                    <div class="work__content">
+                        <span class="work__tag">Educación • Web</span>
+                        <h3 class="work__title">EduLearn Online Courses</h3>
+                        <p class="work__description">Plataforma de cursos interactivos con reproductor de video,
+                            seguimiento de lecciones y quizzes.</p>
+                        <a href="#contact" class="work__button">
+                            Ver detalles <i class="ri-arrow-right-line"></i>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ==================== RESUMEN / EXPERIENCIA (Acordeón) ==================== -->
+        <section class="resume section" id="resume">
+            <h2 class="section__title" data-title="Mi Trayectoria">Experiencia y Educación</h2>
+            <p class="section__description">Mi camino formativo y los roles profesionales que han enriquecido mis
+                habilidades.</p>
+
+            <div class="resume__container container grid">
+
+                <!-- Columna: Educación -->
+                <div class="resume__group">
+                    <h3 class="resume__heading"><i class="ri-graduation-cap-line"></i> Educación</h3>
+                    <div class="resume__items">
+
+                        <div class="resume__item accordion-open">
+                            <div class="resume__header">
+                                <h4 class="resume__header-title">Ingeniería en Software</h4>
+                                <span class="resume__icon"><i class="ri-subtract-line"></i></span>
+                            </div>
+                            <div class="resume__content">
+                                <div class="resume__meta">
+                                    <span class="resume__institution"><i class="ri-building-line"></i> Universidad
+                                        Tecnológica</span>
+                                    <span class="resume__date"><i class="ri-calendar-line"></i> 2018 - 2022</span>
+                                </div>
+                                <p class="resume__description">
+                                    Graduada con honores. Especialización en algoritmos, arquitectura de software, bases
+                                    de datos y desarrollo web avanzado.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="resume__item">
+                            <div class="resume__header">
+                                <h4 class="resume__header-title">Master en Desarrollo Web Frontend</h4>
+                                <span class="resume__icon"><i class="ri-add-line"></i></span>
+                            </div>
+                            <div class="resume__content">
+                                <div class="resume__meta">
+                                    <span class="resume__institution"><i class="ri-building-line"></i> Tech
+                                        Institute</span>
+                                    <span class="resume__date"><i class="ri-calendar-line"></i> 2022 - 2023</span>
+                                </div>
+                                <p class="resume__description">
+                                    Enfoque intensivo en JavaScript moderno (ES6+), frameworks SPA, arquitectura CSS
+                                    escalable y pruebas automatizadas.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="resume__item">
+                            <div class="resume__header">
+                                <h4 class="resume__header-title">Certificación Profesional UI/UX</h4>
+                                <span class="resume__icon"><i class="ri-add-line"></i></span>
+                            </div>
+                            <div class="resume__content">
+                                <div class="resume__meta">
+                                    <span class="resume__institution"><i class="ri-building-line"></i> Design
+                                        Academy</span>
+                                    <span class="resume__date"><i class="ri-calendar-line"></i> 2023</span>
+                                </div>
+                                <p class="resume__description">
+                                    Metodologías de diseño centrado en el usuario, investigación cualitativa,
+                                    wireframing, testing de usabilidad y design systems.
+                                </p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Columna: Experiencia Laboral -->
+                <div class="resume__group">
+                    <h3 class="resume__heading"><i class="ri-briefcase-line"></i> Experiencia Laboral</h3>
+                    <div class="resume__items">
+
+                        <div class="resume__item accordion-open">
+                            <div class="resume__header">
+                                <h4 class="resume__header-title">Desarrolladora Frontend Senior</h4>
+                                <span class="resume__icon"><i class="ri-subtract-line"></i></span>
+                            </div>
+                            <div class="resume__content">
+                                <div class="resume__meta">
+                                    <span class="resume__institution"><i class="ri-building-line"></i> InnovaTech
+                                        Solutions</span>
+                                    <span class="resume__date"><i class="ri-calendar-line"></i> 2024 - Presente</span>
+                                </div>
+                                <p class="resume__description">
+                                    Liderazgo técnico en la construcción de interfaces SPA de alto tráfico.
+                                    Implementación de buenas prácticas y reducción de tiempos de carga en un 35%.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="resume__item">
+                            <div class="resume__header">
+                                <h4 class="resume__header-title">Diseñadora & Desarrolladora Frontend</h4>
+                                <span class="resume__icon"><i class="ri-add-line"></i></span>
+                            </div>
+                            <div class="resume__content">
+                                <div class="resume__meta">
+                                    <span class="resume__institution"><i class="ri-building-line"></i> Creative Web
+                                        Agency</span>
+                                    <span class="resume__date"><i class="ri-calendar-line"></i> 2022 - 2024</span>
+                                </div>
+                                <p class="resume__description">
+                                    Desarrollo de sitios web a medida para más de 25 clientes internacionales. Diseño
+                                    responsivo de layouts complejos y animaciones fluidas.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="resume__item">
+                            <div class="resume__header">
+                                <h4 class="resume__header-title">Desarrolladora Web Junior</h4>
+                                <span class="resume__icon"><i class="ri-add-line"></i></span>
+                            </div>
+                            <div class="resume__content">
+                                <div class="resume__meta">
+                                    <span class="resume__institution"><i class="ri-building-line"></i> StartUp
+                                        Studio</span>
+                                    <span class="resume__date"><i class="ri-calendar-line"></i> 2021 - 2022</span>
+                                </div>
+                                <p class="resume__description">
+                                    Maquetación de páginas de aterrizaje en HTML5 y CSS3. Integración de interactividad
+                                    con JavaScript y mantenimiento del sitio corporativo.
+                                </p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ==================== TESTIMONIOS ==================== -->
+        <section class="testimonials section" id="testimonials">
+            <h2 class="section__title" data-title="Referencias">Testimonios</h2>
+            <p class="section__description">La satisfacción y opinión de clientes y colegas con los que he colaborado.
+            </p>
+
+            <div class="testimonials__container container swiper">
+                <div class="swiper-wrapper">
+
+                    <!-- Testimonio 1 -->
+                    <div class="card testimonial__card swiper-slide">
+                        <div class="testimonial__rating">
+                            <i class="ri-star-fill"></i>
+                            <i class="ri-star-fill"></i>
+                            <i class="ri-star-fill"></i>
+                            <i class="ri-star-fill"></i>
+                            <i class="ri-star-fill"></i>
+                        </div>
+                        <p class="testimonial__quote">
+                            "Zoe transformó por completo la imagen de nuestra plataforma web. Su meticulosa atención a
+                            la responsividad y a los micro-detalles en JavaScript disparó la interacción de nuestros
+                            usuarios en un 40%."
+                        </p>
+                        <div class="testimonial__profile">
+                            <img src="assets/img/avatar1.svg" alt="Carlos Mendoza" class="testimonial__img">
+                            <div>
+                                <h4 class="testimonial__name">Carlos Mendoza</h4>
+                                <span class="testimonial__role">CEO en InnovaTech</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Testimonio 2 -->
+                    <div class="card testimonial__card swiper-slide">
+                        <div class="testimonial__rating">
+                            <i class="ri-star-fill"></i>
+                            <i class="ri-star-fill"></i>
+                            <i class="ri-star-fill"></i>
+                            <i class="ri-star-fill"></i>
+                            <i class="ri-star-fill"></i>
+                        </div>
+                        <p class="testimonial__quote">
+                            "Trabajar con Zoe ha sido un placer absoluto. No solo entregó el código antes del plazo
+                            estimado, sino que propuso mejoras de experiencia que encantaron a nuestros usuarios
+                            finales."
+                        </p>
+                        <div class="testimonial__profile">
+                            <img src="assets/img/avatar2.svg" alt="Laura Gómez" class="testimonial__img">
+                            <div>
+                                <h4 class="testimonial__name">Laura Gómez</h4>
+                                <span class="testimonial__role">Directora de Producto en CreativeLab</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Testimonio 3 -->
+                    <div class="card testimonial__card swiper-slide">
+                        <div class="testimonial__rating">
+                            <i class="ri-star-fill"></i>
+                            <i class="ri-star-fill"></i>
+                            <i class="ri-star-fill"></i>
+                            <i class="ri-star-fill"></i>
+                            <i class="ri-star-fill"></i>
+                        </div>
+                        <p class="testimonial__quote">
+                            "Una programadora frontend sobresaliente. Su conocimiento de HTML5, CSS moderno y
+                            optimización es de primer nivel. Recomendada al 100% para cualquier desafío de desarrollo."
+                        </p>
+                        <div class="testimonial__profile">
+                            <img src="assets/img/avatar3.svg" alt="Andrés Silva" class="testimonial__img">
+                            <div>
+                                <h4 class="testimonial__name">Andrés Silva</h4>
+                                <span class="testimonial__role">Tech Lead en SaaS Global</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- Paginación Swiper -->
+                <div class="swiper-pagination"></div>
+            </div>
+        </section>
+
+        <!-- ==================== CONTACTO ==================== -->
+        <section class="contact section" id="contact">
+            <h2 class="section__title" data-title="Ponte en Contacto">Contáctame</h2>
+            <p class="section__description">¿Tienes una idea de proyecto o buscas sumar talento a tu equipo? Escríbeme y
+                hablemos.</p>
+
+            <div class="contact__container container grid">
+
+                <!-- Métodos de Contacto -->
+                <div class="contact__info">
+                    <h3 class="contact__subtitle">Canales Directos</h3>
+
+                    <div class="contact__cards">
+                        <div class="card contact__card">
+                            <i class="ri-mail-line contact__card-icon"></i>
+                            <h4 class="contact__card-title">Correo Electrónico</h4>
+                            <span class="contact__card-data">contacto@zoemiller.dev</span>
+                            <a href="mailto:contacto@zoemiller.dev" class="contact__button">
+                                Enviar email <i class="ri-arrow-right-line"></i>
+                            </a>
+                        </div>
+
+                        <div class="card contact__card">
+                            <i class="ri-whatsapp-line contact__card-icon"></i>
+                            <h4 class="contact__card-title">WhatsApp / Teléfono</h4>
+                            <span class="contact__card-data">+34 612 345 678</span>
+                            <a href="https://api.whatsapp.com/send?phone=34612345678&text=Hola%20Zoe,%20me%20gustar%C3%ADa%20hablar%20sobre%20un%20proyecto"
+                                target="_blank" rel="noopener noreferrer" class="contact__button">
+                                Chatear ahora <i class="ri-arrow-right-line"></i>
+                            </a>
+                        </div>
+
+                        <div class="card contact__card">
+                            <i class="ri-map-pin-line contact__card-icon"></i>
+                            <h4 class="contact__card-title">Ubicación</h4>
+                            <span class="contact__card-data">Madrid, España (Disponible para trabajo remoto
+                                global)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Formulario de Contacto -->
+                <div class="card contact__form-box">
+                    <form class="contact__form grid" id="contact-form">
+                        <div class="contact__form-div">
+                            <label class="contact__form-label" for="contact-name">Nombre Completo *</label>
+                            <input type="text" class="contact__form-input" id="contact-name" name="user_name"
+                                placeholder="Ej. Juan Pérez" required>
+                        </div>
+
+                        <div class="contact__form-div">
+                            <label class="contact__form-label" for="contact-email">Correo Electrónico *</label>
+                            <input type="email" class="contact__form-input" id="contact-email" name="user_email"
+                                placeholder="juan@ejemplo.com" required>
+                        </div>
+
+                        <div class="contact__form-div">
+                            <label class="contact__form-label" for="contact-subject">Asunto</label>
+                            <input type="text" class="contact__form-input" id="contact-subject" name="user_subject"
+                                placeholder="Consulta sobre nuevo proyecto">
+                        </div>
+
+                        <div class="contact__form-div">
+                            <label class="contact__form-label" for="contact-message">Mensaje *</label>
+                            <textarea class="contact__form-input contact__form-area" id="contact-message"
+                                name="user_message" rows="5" placeholder="Escribe tu mensaje aquí..."
+                                required></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn--primary" id="contact-btn">
+                            <i class="ri-send-plane-fill"></i> Enviar Mensaje
+                        </button>
+
+                        <p class="contact__status-message" id="message"></p>
+                    </form>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer class="footer">
+        <div class="footer__container container">
+            <div class="footer__content">
+                <a href="#home" class="footer__logo">Zoe<span>.</span></a>
+                <p class="footer__description">Desarrollo Frontend moderno, estético y orientado al usuario.</p>
+
+                <ul class="footer__links">
+                    <li><a href="#home" class="footer__link">Inicio</a></li>
+                    <li><a href="#services" class="footer__link">Servicios</a></li>
+                    <li><a href="#skills" class="footer__link">Habilidades</a></li>
+                    <li><a href="#work" class="footer__link">Proyectos</a></li>
+                    <li><a href="#resume" class="footer__link">Experiencia</a></li>
+                    <li><a href="#contact" class="footer__link">Contacto</a></li>
+                </ul>
+
+                <div class="footer__socials">
+                    <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" class="footer__social-link"
+                        aria-label="Twitter"><i class="ri-twitter-fill"></i></a>
+                    <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="footer__social-link"
+                        aria-label="GitHub"><i class="ri-github-fill"></i></a>
+                    <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="footer__social-link"
+                        aria-label="LinkedIn"><i class="ri-linkedin-fill"></i></a>
+                </div>
+            </div>
+
+            <div class="footer__bottom">
+                <p class="footer__copyright">&copy; <span id="current-year">2026</span> Zoe Miller. Todos los derechos
+                    reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ==================== BOTÓN SCROLL HACIA ARRIBA ==================== -->
+    <a href="#home" class="scrollup" id="scroll-up" aria-label="Volver arriba">
+        <i class="ri-arrow-up-line"></i>
+    </a>
+
+    <!-- ==================== SCRIPTS EXTERNOS ==================== -->
+    <!-- Swiper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+    <!-- MixItUp JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mixitup/3.3.1/mixitup.min.js"></script>
+    <!-- EmailJS SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+
+    <!-- ==================== SCRIPT PROPIO ==================== -->
+    <script src="main.js"></script>
+</body>
+
+</html>
